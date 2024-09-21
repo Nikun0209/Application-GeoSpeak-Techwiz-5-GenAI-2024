@@ -8,15 +8,6 @@ from google_gemini import google_gemini_translate
 from googletrans import Translator
 from deep_translator import GoogleTranslator
 
-# Cụm từ cần dịch
-text = "Ánh Ngọc dễ thương"
-
-# Dịch từ tiếng Việt sang tiếng Anh
-translated = GoogleTranslator(source='vi', target='en').translate(text)
-print(f"Văn bản gốc: {text}")
-print(f"Văn bản dịch: {translated}")
-
-
 # Ensure consistency in language detection
 DetectorFactory.seed = 0
 
