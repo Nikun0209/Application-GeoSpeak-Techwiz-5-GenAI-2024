@@ -5,6 +5,7 @@ import hashlib
 from datetime import datetime
 from langdetect import detect, DetectorFactory
 from google_gemini import google_gemini_translate
+from googletrans import Translator
 
 # Ensure consistency in language detection
 DetectorFactory.seed = 0
@@ -266,87 +267,28 @@ with tab1:
             mime="text/plain"
         )
 
-# Tab 2: Text translation
 with tab2:
     col_1, col_2 = st.columns(2)
 
-    # Tab 2: Text translation
+    # Column for selecting output language
     with col_1:
         output_languages_list = [
-            'Afrikaans',
-            'Albanian',
-            'Amharic',
-            'Arabic',
-            'Azerbaijani',
-            'Bengali',
-            'Bosnian',
-            'Bulgarian',
-            'Burmese',
-            'Catalan',
-            'Cebuano',
-            'Chinese Simplified',
-            'Chinese Traditional',
-            'Croatian',
-            'Czech',
-            'Danish',
-            'Dutch',
-            'English',
-            'Finnish',
-            'French',
-            'Georgian',
-            'German',
-            'Greek',
-            'Gujarati',
-            'Hausa',
-            'Hebrew',
-            'Hindi',
-            'Hungarian',
-            'Icelandic',
-            'Igbo',
-            'Indonesian',
-            'Italian',
-            'Japanese',
-            'Javanese',
-            'Kannada',
-            'Kazakh',
-            'Korean',
-            'Kurdish',
-            'Lao',
-            'Latvian',
-            'Lithuanian',
-            'Malay',
-            'Malayalam',
-            'Marathi',
-            'Nepali',
-            'Pashto',
-            'Persian',
-            'Polish',
-            'Portuguese',
-            'Punjabi',
-            'Romanian',
-            'Russian',
-            'Serbian',
-            'Sinhala',
-            'Slovak',
-            'Somali',
-            'Spanish',
-            'Swahili',
-            'Swedish',
-            'Tagalog',
-            'Tamil',
-            'Telugu',
-            'Thai',
-            'Turkish',
-            'Ukrainian',
-            'Urdu',
-            'Uzbek',
-            'Vietnamese',
-            'Yoruba',
-            'Zulu'
+            'Afrikaans', 'Albanian', 'Amharic', 'Arabic', 'Azerbaijani', 'Bengali',
+            'Bosnian', 'Bulgarian', 'Burmese', 'Catalan', 'Cebuano', 'Chinese Simplified',
+            'Chinese Traditional', 'Croatian', 'Czech', 'Danish', 'Dutch', 'English',
+            'Finnish', 'French', 'Georgian', 'German', 'Greek', 'Gujarati', 'Hausa',
+            'Hebrew', 'Hindi', 'Hungarian', 'Icelandic', 'Igbo', 'Indonesian', 'Italian',
+            'Japanese', 'Javanese', 'Kannada', 'Kazakh', 'Korean', 'Kurdish', 'Lao',
+            'Latvian', 'Lithuanian', 'Malay', 'Malayalam', 'Marathi', 'Nepali', 'Pashto',
+            'Persian', 'Polish', 'Portuguese', 'Punjabi', 'Romanian', 'Russian', 'Serbian',
+            'Sinhala', 'Slovak', 'Somali', 'Spanish', 'Swahili', 'Swedish', 'Tagalog',
+            'Tamil', 'Telugu', 'Thai', 'Turkish', 'Ukrainian', 'Urdu', 'Uzbek', 'Vietnamese',
+            'Yoruba', 'Zulu'
         ]
 
         output_language_tab2 = st.selectbox(label="Output language", options=output_languages_list, key="output_language_tab2")
 
+    # Column for entering input text
     with col_2:
         input_text_tab2 = st.text_area("Enter text here (up to 1000 characters)", key="input_text_tab2")
 
@@ -357,83 +299,29 @@ with tab2:
                 st.stop()  # Stop the program
             else:
                 detected_language = detect(input_text_tab2)
-
                 language_mapping = {
-                    "Afrikaans": "af",
-                    "Albanian": "sq",
-                    "Amharic": "am",
-                    "Arabic": "ar",
-                    "Azerbaijani": "az",
-                    "Bengali": "bn",
-                    "Bosnian": "bs",
-                    "Bulgarian": "bg",
-                    "Burmese": "my",
-                    "Catalan": "ca",
-                    "Cebuano": "ceb",
-                    "Chinese Simplified": "zh-CN",
-                    "Chinese Traditional": "zh-TW",
-                    "Croatian": "hr",
-                    "Czech": "cs",
-                    "Danish": "da",
-                    "Dutch": "nl",
-                    "English": "en",
-                    "Finnish": "fi",
-                    "French": "fr",
-                    "Georgian": "ka",
-                    "German": "de",
-                    "Greek": "el",
-                    "Gujarati": "gu",
-                    "Hausa": "ha",
-                    "Hebrew": "he",
-                    "Hindi": "hi",
-                    "Hungarian": "hu",
-                    "Icelandic": "is",
-                    "Igbo": "ig",
-                    "Indonesian": "id",
-                    "Italian": "it",
-                    "Japanese": "ja",
-                    "Javanese": "jv",
-                    "Kannada": "kn",
-                    "Kazakh": "kk",
-                    "Korean": "ko",
-                    "Kurdish": "ku",
-                    "Lao": "lo",
-                    "Latvian": "lv",
-                    "Lithuanian": "lt",
-                    "Malay": "ms",
-                    "Malayalam": "ml",
-                    "Marathi": "mr",
-                    "Nepali": "ne",
-                    "Pashto": "ps",
-                    "Persian": "fa",
-                    "Polish": "pl",
-                    "Portuguese": "pt",
-                    "Punjabi": "pa",
-                    "Romanian": "ro",
-                    "Russian": "ru",
-                    "Serbian": "sr",
-                    "Sinhala": "si",
-                    "Slovak": "sk",
-                    "Somali": "so",
-                    "Spanish": "es",
-                    "Swahili": "sw",
-                    "Swedish": "sv",
-                    "Tagalog": "tl",
-                    "Tamil": "ta",
-                    "Telugu": "te",
-                    "Thai": "th",
-                    "Turkish": "tr",
-                    "Ukrainian": "uk",
-                    "Urdu": "ur",
-                    "Uzbek": "uz",
-                    "Vietnamese": "vi",
-                    "Yoruba": "yo",
-                    "Zulu": "zu"
+                    "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
+                    "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
+                    "Burmese": "my", "Catalan": "ca", "Cebuano": "ceb", "Chinese Simplified": "zh-CN",
+                    "Chinese Traditional": "zh-TW", "Croatian": "hr", "Czech": "cs", "Danish": "da",
+                    "Dutch": "nl", "English": "en", "Finnish": "fi", "French": "fr", "Georgian": "ka",
+                    "German": "de", "Greek": "el", "Gujarati": "gu", "Hausa": "ha", "Hebrew": "he",
+                    "Hindi": "hi", "Hungarian": "hu", "Icelandic": "is", "Igbo": "ig", "Indonesian": "id",
+                    "Italian": "it", "Japanese": "ja", "Javanese": "jv", "Kannada": "kn", "Kazakh": "kk",
+                    "Korean": "ko", "Kurdish": "ku", "Lao": "lo", "Latvian": "lv", "Lithuanian": "lt",
+                    "Malay": "ms", "Malayalam": "ml", "Marathi": "mr", "Nepali": "ne", "Pashto": "ps",
+                    "Persian": "fa", "Polish": "pl", "Portuguese": "pt", "Punjabi": "pa", "Romanian": "ro",
+                    "Russian": "ru", "Serbian": "sr", "Sinhala": "si", "Slovak": "sk", "Somali": "so",
+                    "Spanish": "es", "Swahili": "sw", "Swedish": "sv", "Tagalog": "tl", "Tamil": "ta",
+                    "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
+                    "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
                 }
-
                 st.session_state.input_language_tab2 = language_mapping.get(detected_language, "en")
-                translated_text = google_gemini_translate(input_text_tab2, st.session_state.input_language_tab2, output_language_tab2)
-                st.session_state.translated_text_tab2 = translated_text
+
+                # Translate text using Google Translate API
+                translator = Translator()
+                translated = translator.translate(input_text_tab2, src=st.session_state.input_language_tab2, dest=output_language_tab2)
+                st.session_state.translated_text_tab2 = translated.text
         else:
             st.warning("Please enter the text to be translated.")
 
