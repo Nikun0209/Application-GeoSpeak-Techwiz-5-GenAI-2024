@@ -36,9 +36,9 @@ To create a virtual environment and install requirements in Python 3.12.3 on dif
 
 `pip install googletrans==4.0.0-rc1`
 
-### Installing google_gemini
+### Installing GoogleTranslator
 
-`pip install google-gemini`
+`pip install deep-translator`
 
 ### Installing langdetect
 
