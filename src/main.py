@@ -292,13 +292,18 @@ with tab2:
     with col_2:
         input_text_tab2 = st.text_area("Enter text here (up to 1000 characters)", key="input_text_tab2")
 
+    # Khởi tạo biến input_language_tab2 nếu chưa tồn tại
+    if "input_language_tab2" not in st.session_state:
+        st.session_state.input_language_tab2 = "en"  # Giá trị mặc định, có thể thay đổi theo nhu cầu
+
     if st.button("Translate", key="translate_button_tab2"):
         if input_text_tab2.strip():
             if len(input_text_tab2) > 1000:
                 st.warning("Limit is 1000 characters.")
                 st.stop()  # Stop the program
             else:
-                detected_language = detect(input_text_tab2)
+                # detected_language = detect(input_text_tab2)
+
                 language_mapping = {
                     "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
                     "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
@@ -316,11 +321,15 @@ with tab2:
                     "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
                     "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
                 }
-                st.session_state.input_language_tab2 = language_mapping.get(detected_language, "en")
+                # st.session_state.input_language_tab2 = language_mapping.get(detected_language, "en")
 
-                # Translate text using Google Translate API
+                # Lấy ngôn ngữ đầu vào và ngôn ngữ cần dịch
+                input_language = st.session_state.input_language_tab2  # Ngôn ngữ đầu vào (có thể chọn trước đó)
+                output_language = output_language_tab2  # Ngôn ngữ đầu ra đã chọn
+
+                # Dịch văn bản bằng Google Translate API
                 translator = Translator()
-                translated = translator.translate(input_text_tab2, src=st.session_state.input_language_tab2, dest=output_language_tab2)
+                translated = translator.translate(input_text_tab2, src=input_language, dest=output_language)
                 st.session_state.translated_text_tab2 = translated.text
         else:
             st.warning("Please enter the text to be translated.")
