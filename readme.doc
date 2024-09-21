@@ -29,6 +29,29 @@ Before running the application, you need to install the following dependencies o
 To create a virtual environment and install requirements in Python 3.12.3 on different operating systems, follow the instructions below:
 
 ### Installing requirements
+
+`pip install -r requirements.txt`
+
+### Installing googletrans
+
+`pip install googletrans==4.0.0-rc1`
+
+### Installing google_gemini
+
+`pip install google-gemini`
+
+### Installing langdetect
+
+`pip install langdetect`
+
+### Installing chardet
+
+`pip install chardet`
+
+### Installing Streamlit
+
+`pip install streamlit`
+
 ### For Windows:
 
 Open the Command Prompt by pressing Win + R, typing "cmd", and pressing Enter.
@@ -84,6 +107,11 @@ Add Gemini API Key in Constants
 
 This will start a local web server and open the application in your default web browser.
 
+
+## Note:
+if you get the error "AttributeError: 'NoneType' object has no attribute 'group'
+
+`pip install httpcore httpx googletrans==4.0.0-rc1`
 
 ```
 ├─ readme.doc

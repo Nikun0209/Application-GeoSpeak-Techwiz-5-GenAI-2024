@@ -302,8 +302,6 @@ with tab2:
                 st.warning("Limit is 1000 characters.")
                 st.stop()  # Stop the program
             else:
-                # detected_language = detect(input_text_tab2)
-
                 language_mapping = {
                     "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
                     "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
@@ -321,11 +319,9 @@ with tab2:
                     "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
                     "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
                 }
-                # st.session_state.input_language_tab2 = language_mapping.get(detected_language, "en")
 
-                # Lấy ngôn ngữ đầu vào và ngôn ngữ cần dịch
-                input_language = st.session_state.input_language_tab2  # Ngôn ngữ đầu vào (có thể chọn trước đó)
-                output_language = output_language_tab2  # Ngôn ngữ đầu ra đã chọn
+                input_language = st.session_state.input_language_tab2 
+                output_language = output_language_tab2 
 
                 # Dịch văn bản bằng Google Translate API
                 translator = Translator()
