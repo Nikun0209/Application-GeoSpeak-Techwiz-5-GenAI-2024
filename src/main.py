@@ -5,7 +5,6 @@ import hashlib
 from datetime import datetime
 from langdetect import detect, DetectorFactory
 from google_gemini import google_gemini_translate
-from googletrans import Translator
 from deep_translator import GoogleTranslator
 
 # Ensure consistency in language detection
