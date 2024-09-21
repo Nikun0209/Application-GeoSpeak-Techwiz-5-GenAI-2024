@@ -292,7 +292,6 @@ with tab2:
     with col_2:
         input_text_tab2 = st.text_area("Enter text here (up to 1000 characters)", key="input_text_tab2")
 
-    # Khởi tạo biến input_language_tab2 nếu chưa tồn tại
     if "input_language_tab2" not in st.session_state:
         st.session_state.input_language_tab2 = "en"
 
@@ -323,7 +322,7 @@ with tab2:
                 input_language = st.session_state.input_language_tab2 
                 output_language = output_language_tab2 
 
-                # Dịch văn bản bằng Google Translate API
+                # Google Translate API
                 translator = Translator()
                 translated = translator.translate(input_text_tab2, src=input_language, dest=output_language)
                 st.session_state.translated_text_tab2 = translated.text
