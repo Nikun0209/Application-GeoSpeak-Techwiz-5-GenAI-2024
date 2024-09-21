@@ -116,6 +116,7 @@ if you get the error "AttributeError: 'NoneType' object has no attribute 'group'
 ```
 ├─ readme.doc
 ├─ requirements.txt
+├─ venv
 └─ src
    ├─ main.py
    └─ google_gemini.py
