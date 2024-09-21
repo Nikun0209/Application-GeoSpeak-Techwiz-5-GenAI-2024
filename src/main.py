@@ -431,15 +431,9 @@ with tab2:
                     "Zulu": "zu"
                 }
 
-                target_language_code = language_mapping.get(output_language_tab2, "en")
                 st.session_state.input_language_tab2 = language_mapping.get(detected_language, "en")
-
-                if detected_language == target_language_code:
-                    st.warning(f"The content you provided already in {output_language_tab2}.")
-                    st.stop()  # Stop the program
-                else:
-                    translated_text = google_gemini_translate(input_text_tab2, st.session_state.input_language_tab2, output_language_tab2)
-                    st.session_state.translated_text_tab2 = translated_text
+                translated_text = google_gemini_translate(input_text_tab2, st.session_state.input_language_tab2, output_language_tab2)
+                st.session_state.translated_text_tab2 = translated_text
         else:
             st.warning("Please enter the text to be translated.")
 
