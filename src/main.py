@@ -294,7 +294,7 @@ with tab2:
 
     # Khởi tạo biến input_language_tab2 nếu chưa tồn tại
     if "input_language_tab2" not in st.session_state:
-        st.session_state.input_language_tab2 = "en"  # Giá trị mặc định, có thể thay đổi theo nhu cầu
+        st.session_state.input_language_tab2 = "en"
 
     if st.button("Translate", key="translate_button_tab2"):
         if input_text_tab2.strip():
