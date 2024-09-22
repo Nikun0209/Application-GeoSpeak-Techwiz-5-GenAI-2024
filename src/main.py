@@ -400,9 +400,10 @@ with tab4:
 
     st.write(
         """
+        **ABOUT US** \n
         The Avengers - AI Translator is a text/file translation and chatbot support using GenAI technology.
-
-        The Avengers - AI Translator project members:
+        
+        **THE AVENGERS - AI TRANSLATOR PROJECT MEMBERS**
         - Dương Gia Thành: Main Developer
         - Nguyễn Quốc Anh: Project Manager
         - Other members:
@@ -411,10 +412,9 @@ with tab4:
             - Trần Mai Phương
             - Lâm Kim Khánh
 
-        Project website:
-        [Visit here](https://theavengers.streamlit.app/)
+        - Project website - [Visit here](https://theavengers.streamlit.app/)
 
-        **Contact:**
+        **CONTACT**
         - Dương Gia Thành: [duonggiathanh3819@gmail.com](mailto:duonggiathanh3819@gmail.com)
         - Nguyễn Quốc Anh: [anh.datascience@gmail.com](mailto:anh.datascience@gmail.com)
         """
