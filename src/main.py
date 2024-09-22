@@ -397,7 +397,7 @@ with tab4:
 
     st.markdown(
     """
-        Link: [The Avengers - AI Translator · Streamlit](https://theavengers.streamlit.app/)
+        User guide: [The Avengers - AI Translator · Streamlit](https://youtu.be/6ZnQhEFjJZ8)
     """)
 
     st.image("img/z5855806767554_aef51eacda4c36fd65660ce9ee04af64.jpg", width=50, use_column_width=True)
