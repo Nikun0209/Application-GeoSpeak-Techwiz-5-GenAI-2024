@@ -137,38 +137,43 @@ with tab1:
 
                 st.write(text)
 
-                source_language = detect(text)
-                language_mapping = {
-                    "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
-                    "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
-                    "Burmese": "my", "Catalan": "ca", "Cebuano": "ceb", "Chinese Simplified": "zh-CN",
-                    "Chinese Traditional": "zh-TW", "Croatian": "hr", "Czech": "cs", "Danish": "da",
-                    "Dutch": "nl", "English": "en", "Finnish": "fi", "French": "fr", "Georgian": "ka",
-                    "German": "de", "Greek": "el", "Gujarati": "gu", "Hausa": "ha", "Hebrew": "he",
-                    "Hindi": "hi", "Hungarian": "hu", "Icelandic": "is", "Igbo": "ig", "Indonesian": "id",
-                    "Italian": "it", "Japanese": "ja", "Javanese": "jv", "Kannada": "kn", "Kazakh": "kk",
-                    "Korean": "ko", "Kurdish": "ku", "Lao": "lo", "Latvian": "lv", "Lithuanian": "lt",
-                    "Malay": "ms", "Malayalam": "ml", "Marathi": "mr", "Nepali": "ne", "Pashto": "ps",
-                    "Persian": "fa", "Polish": "pl", "Portuguese": "pt", "Punjabi": "pa", "Romanian": "ro",
-                    "Russian": "ru", "Serbian": "sr", "Sinhala": "si", "Slovak": "sk", "Somali": "so",
-                    "Spanish": "es", "Swahili": "sw", "Swedish": "sv", "Tagalog": "tl", "Tamil": "ta",
-                    "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
-                    "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
-                }
-                target_language_code = language_mapping.get(output_language_tab1)
-                
-                if source_language == target_language_code:
-                    st.warning(f"The content you provided is already in {output_language_tab1}.")
+                # Limit the number of characters
+                if len(text) > 1000:
+                    st.warning("Limit is 1000 characters.")
                     st.stop()  # Stop the program
                 else:
-                    input_language = language_mapping.get(source_language)
-                    output_language = language_mapping.get(target_language_code)
+                    source_language = detect(text)
+                    language_mapping = {
+                        "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
+                        "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
+                        "Burmese": "my", "Catalan": "ca", "Cebuano": "ceb", "Chinese Simplified": "zh-CN",
+                        "Chinese Traditional": "zh-TW", "Croatian": "hr", "Czech": "cs", "Danish": "da",
+                        "Dutch": "nl", "English": "en", "Finnish": "fi", "French": "fr", "Georgian": "ka",
+                        "German": "de", "Greek": "el", "Gujarati": "gu", "Hausa": "ha", "Hebrew": "he",
+                        "Hindi": "hi", "Hungarian": "hu", "Icelandic": "is", "Igbo": "ig", "Indonesian": "id",
+                        "Italian": "it", "Japanese": "ja", "Javanese": "jv", "Kannada": "kn", "Kazakh": "kk",
+                        "Korean": "ko", "Kurdish": "ku", "Lao": "lo", "Latvian": "lv", "Lithuanian": "lt",
+                        "Malay": "ms", "Malayalam": "ml", "Marathi": "mr", "Nepali": "ne", "Pashto": "ps",
+                        "Persian": "fa", "Polish": "pl", "Portuguese": "pt", "Punjabi": "pa", "Romanian": "ro",
+                        "Russian": "ru", "Serbian": "sr", "Sinhala": "si", "Slovak": "sk", "Somali": "so",
+                        "Spanish": "es", "Swahili": "sw", "Swedish": "sv", "Tagalog": "tl", "Tamil": "ta",
+                        "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
+                        "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
+                    }
+                    target_language_code = language_mapping.get(output_language_tab1)
+                    
+                    if source_language == target_language_code:
+                        st.warning(f"The content you provided is already in {output_language_tab1}.")
+                        st.stop()  # Stop the program
+                    else:
+                        input_language = language_mapping.get(source_language)
+                        output_language = language_mapping.get(target_language_code)
 
-                    # Translate text using Google Translate API
-                    translator = GoogleTranslator(source=source_language, target=target_language_code)
-                    translated_text = translator.translate(text)
-                    st.session_state.translated_text_tab1 = translated_text
-                    # st.session_state.uploaded_file_type = 'docx'
+                        # Translate text using Google Translate API
+                        translator = GoogleTranslator(source=source_language, target=target_language_code)
+                        translated_text = translator.translate(text)
+                        st.session_state.translated_text_tab1 = translated_text
+                        # st.session_state.uploaded_file_type = 'docx'
 
             else:   
                 st.error("Please upload a file with the extension .docx")
