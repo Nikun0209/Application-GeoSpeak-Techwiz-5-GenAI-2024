@@ -135,8 +135,6 @@ with tab1:
                     full_text.append(para.text)
                 text = '\n'.join(full_text)
 
-                st.write(text)
-
                 # Limit the number of characters
                 if len(text) > 1000:
                     st.warning("Limit is 1000 characters.")
