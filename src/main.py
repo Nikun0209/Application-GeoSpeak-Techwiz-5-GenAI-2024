@@ -70,7 +70,7 @@ with tab1:
         """
         <style>
             .e1b2p2ww11 .e1bju1570::before {
-                content: "Please note: We only accept text up to 1000 characters long: .txt";
+                content: "Please note: We only accept text up to 1000 characters long: .txt, .docx";
                 font-size: 12px;
                 color: white;
                 font-family: 'Source Sans Pro', sans-serif;
