@@ -39,7 +39,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Create navigation tabs
-tab1, tab2, tab3 = st.tabs(["📑 Documents", "🔤 Text", "🤖 ChatBot"])
+tab1, tab2, tab3, tab4 = st.tabs(["📑 Documents", "🔤 Text", "🤖 ChatBot", "💡 About Us"])
 
 # Tab 1: Document translation
 with tab1:
@@ -390,3 +390,32 @@ with tab3:
         gemini_response = google_gemini_translate(user_prompt)
         st.session_state.chat_session.append({"role": "assistant", "text": gemini_response})
         st.chat_message("assistant").markdown(gemini_response)
+
+# Tab 4: About Us
+with tab4:
+    col1, col2, col3 = st.columns(3)
+
+    with col2:
+        st.image("img/z5855663862790_aa6a77c21ae95ad7f83fb3eccb262482.jpg", width=50,  caption="The Avengers Team", use_column_width=True)
+
+    st.write(
+        """
+        The Avengers - AI Translator is a text/file translation and chatbot support using GenAI technology.
+
+        The Avengers - AI Translator project members:
+        - Dương Gia Thành: Main Developer
+        - Nguyễn Quốc Anh: Project Manager
+        - Other members:
+            - Nguyễn Quốc Bảo
+            - Phạm Hoàng Tiến
+            - Trần Mai Phương
+            - Lâm Kim Khánh
+
+        Project website:
+        [Visit here](https://theavengers.streamlit.app/)
+
+        **Contact:**
+        - Dương Gia Thành: [duonggiathanh3819@gmail.com](mailto:duonggiathanh3819@gmail.com)
+        - Nguyễn Quốc Anh: [anh.datascience@gmail.com](mailto:anh.datascience@gmail.com)
+        """
+    )
