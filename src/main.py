@@ -392,11 +392,9 @@ with tab3:
         st.chat_message("assistant").markdown(gemini_response)
 
 with tab4:
-    # Tiêu đề
     st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
     st.subheader("Leveraging Gen AI for Smart solution of Translation: Geo-Speak Application")
 
-    # Liên kết
     st.markdown(
     """
         Link: [The Avengers - AI Translator · Streamlit](https://theavengers.streamlit.app/)
@@ -417,68 +415,69 @@ with tab4:
 
         **What is going on with Translation?**
 
-        In the fast pace of world, it is common that people are breathing the cosmopolitan atmosphere, even companies. What does it mean? People have engaged in using in diverse languages more than ever before in their workplaces. They utilize languages or linguistic skills in reading and writing documents, listening to foreigners and especially speaking in a manner of responding actively to any information that is not of their “mother tongue” they received. To this point, some may think of many conventional translation tools as a solution which automatically translate any text that they input. It is fair enough to agree, but, the main point is that those tools are just simply doing the job of translation.
+        <p style="text-align: justify;">In the fast pace of world, it is common that people are breathing the cosmopolitan atmosphere, even companies. What does it mean? People have engaged in using in diverse languages more than ever before in their workplaces. They utilize languages or linguistic skills in reading and writing documents, listening to foreigners and especially speaking in a manner of responding actively to any information that is not of their “mother tongue” they received. To this point, some may think of many conventional translation tools as a solution which automatically translate any text that they input. It is fair enough to agree, but, the main point is that those tools are just simply doing the job of translation.</p>
 
-        Take a closer look at the problem mentioned there, the “job” those conventional translation tools do is transferring words people input into a targeted language form without any consideration of context. It is just like users search for a vocabulary in a thick dictionary book and then use it, but maybe they do not understand how the word can be effectively use in the context they mean. It is about the problem of word choices. Those conventional tools may translate text accurately; however, it would cause difficulties of understanding the text or even misunderstandings. When it turns into the business context in which accuracy is the priority, the problem starts to arise.  People may find it hard to read many technical documents or even communicate about technical problems with many foreign experts. The sufficient flow of information exchange can be a result afterwards. One of problems related to reading technical documents of computer science fields, it is obvious that the same word can have different meanings.
+        <p style="text-align: justify;">Take a closer look at the problem mentioned there, the “job” those conventional translation tools do is transferring words people input into a targeted language form without any consideration of context. It is just like users search for a vocabulary in a thick dictionary book and then use it, but maybe they do not understand how the word can be effectively use in the context they mean. It is about the problem of word choices. Those conventional tools may translate text accurately; however, it would cause difficulties of understanding the text or even misunderstandings. When it turns into the business context in which accuracy is the priority, the problem starts to arise.  People may find it hard to read many technical documents or even communicate about technical problems with many foreign experts. The sufficient flow of information exchange can be a result afterwards. One of problems related to reading technical documents of computer science fields, it is obvious that the same word can have different meanings.</p>
 
-        Given those problems, we, human-beings, starts to think of something smarter and more sophisticated in providing translation service with a good combination of contextual awareness and linguistic profession. Therefore, Gemini's Large language Model and Generative AI (Gen AI) are utilized in developing a translation solution, called Geo-Speak.
+        <p style="text-align: justify;">Given those problems, we, human-beings, starts to think of something smarter and more sophisticated in providing translation service with a good combination of contextual awareness and linguistic profession. Therefore, Gemini's Large language Model and Generative AI (Gen AI) are utilized in developing a translation solution, called Geo-Speak.</p>
 
         **What is Geo-Speak?**
 
-        To tackle issues in the language use, an application, called Geo-Speak, is innovated, aiming to address the limitations of traditional translation methods and the increasing complexity of language usage across diverse domains. By applying Gemini's Large Language Models (LLMs) and Generative AI (Gen AI), Geo-Speak are likely to interpret and translate text in manners of combining the contextual factors and academic linguistics. This application is essential for diplomacy, global business, education, and so on, where precise communication can significantly affect the outcomes. Hence, users are able to overcome language barriers, facilitate cross-cultural understanding, and ensure the smooth flow of information exchanging regardless of personal background or linguistic profession.
-    """)
+        <p style="text-align: justify;">To tackle issues in the language use, an application, called Geo-Speak, is innovated, aiming to address the limitations of traditional translation methods and the increasing complexity of language usage across diverse domains. By applying Gemini's Large Language Models (LLMs) and Generative AI (Gen AI), Geo-Speak are likely to interpret and translate text in manners of combining the contextual factors and academic linguistics. This application is essential for diplomacy, global business, education, and so on, where precise communication can significantly affect the outcomes. Hence, users are able to overcome language barriers, facilitate cross-cultural understanding, and ensure the smooth flow of information exchanging regardless of personal background or linguistic profession.</p>
+        
+    """, unsafe_allow_html=True)
     
     st.image("img/z5855785979880_853b682305e933c24c9e8eae5c40f52e.jpg", width=50, use_column_width=True)
 
     st.markdown(
     """
-        Geo-Speak is a sophisticated real-time web application providing translating services. It is worth to mention that its design is the utilization of cutting-edge AI technologies, particularly a cloud-based Large Language Model, to deliver effective and efficient communication across diverse languages. Not only it enables users overcome the language barriers, but also take contextual sensitiveness into consideration to ensure the flow of information exchanging. It is fair to say that Geo-Speak is a human-kind leap for a context in which people have to adapt to future expansion involved in multinational and multilingual working environments quickly. By leveraging Gemini’s models, which specializes in language comprehension and generation. This solution offers real-time translations that are more accurate and contextually sensitive compared to the conventional methods. Therefore, Geo-Speak can potentially enhance cross-language communication in diverse workplace settings, being indispensable in businesses.
+        <p style="text-align: justify;">Geo-Speak is a sophisticated real-time web application providing translating services. It is worth to mention that its design is the utilization of cutting-edge AI technologies, particularly a cloud-based Large Language Model, to deliver effective and efficient communication across diverse languages. Not only it enables users overcome the language barriers, but also take contextual sensitiveness into consideration to ensure the flow of information exchanging. It is fair to say that Geo-Speak is a human-kind leap for a context in which people have to adapt to future expansion involved in multinational and multilingual working environments quickly. By leveraging Gemini’s models, which specializes in language comprehension and generation. This solution offers real-time translations that are more accurate and contextually sensitive compared to the conventional methods. Therefore, Geo-Speak can potentially enhance cross-language communication in diverse workplace settings, being indispensable in businesses. </p>
 
         **How the Geo-Speak Application works?**
 
         **There are two main phrases performed by the Geo-Speak application:**
 
-        At first, users inputs text or text file (.txt, .docx, .pdf extension) in any language forms and choose the desired target language from a drop-down list provided in the web interface. The Embedding API accesses the input information. At this stage, the application use constraints, related to word limitations and extension of a file to check if the file or text is qualified enough to process the further steps. Particularly, in this project, my team set 1000 words as the limitation and “.txt, .docx, .pdf” extension for the standard of file format. Once verified, the input information will be decoded into a high-dimensional embedding vector that captures its semantic essence. This vector is then used to query a vector Database containing precomputed embeddings of parallel corporate or translation sample. The system extracts relevant documents that closely aligned with the source text embedding, comprising paired texts in both source and target languages to guide the translation process.
-    """)
+        <p style="text-align: justify;">At first, users inputs text or text file (.txt, .docx, .pdf extension) in any language forms and choose the desired target language from a drop-down list provided in the web interface. The Embedding API accesses the input information. At this stage, the application use constraints, related to word limitations and extension of a file to check if the file or text is qualified enough to process the further steps. Particularly, in this project, my team set 1000 words as the limitation and “.txt, .docx, .pdf” extension for the standard of file format. Once verified, the input information will be decoded into a high-dimensional embedding vector that captures its semantic essence. This vector is then used to query a vector Database containing precomputed embeddings of parallel corporate or translation sample. The system extracts relevant documents that closely aligned with the source text embedding, comprising paired texts in both source and target languages to guide the translation process. </p>
+    """, unsafe_allow_html=True)
 
     st.image("img/z5855786203327_f6ec2b25a2b6acbed2fdbaabd8c6de88.jpg", width=50, use_column_width=True)
 
     st.markdown(
     """
-        In the second phrase, the application transfers those data to Google Gemini API for translating process. The translated text is sent back to the users afterwards in a text or text file which is available for reading or downloading.
+        <p style="text-align: justify;">In the second phrase, the application transfers those data to Google Gemini API for translating process. The translated text is sent back to the users afterwards in a text or text file which is available for reading or downloading.</p>
 
         **Technologies and Tools in building Geo-Speak**
 
-        To build Geo-Speak application, we start from scratches that maybe most people find themselves common with terms.
-    """)
+        <p style="text-align: justify;">To build Geo-Speak application, we start from scratches that maybe most people find themselves common with terms.</p>
+    """, unsafe_allow_html=True)
 
     st.image("img/z5855785794142_784584c673ba215f438c3d5329e4ed59.jpg", width=50, use_column_width=True)
 
     st.markdown(
     """
-        For the use of Programming Languages, Python would be smart options. Python will do the jobs of backend development, data processing and integration with AI and natural language toolkit libraries. Meanwhile, HTML and CSS is used for jobs of front-end development, interactivity and user interface design. Relatively, Frameworks of Python can be used along with developing responsive and interactive user interfaces.
+        <p style="text-align: justify;">For the use of Programming Languages, Python would be smart options. Python will do the jobs of backend development, data processing and integration with AI and natural language toolkit libraries. Meanwhile, HTML and CSS is used for jobs of front-end development, interactivity and user interface design. Relatively, Frameworks of Python can be used along with developing responsive and interactive user interfaces.</p>
 
-        For User Interface Design, developers can use HTML and CSS for building responsive and visually appealing user interface of website.
+        <p style="text-align: justify;">For User Interface Design, developers can use HTML and CSS for building responsive and visually appealing user interface of website.</p>
 
-        For Translation APIs, we can utilize which already have before, such as Google Cloud Translation API, Google Gemini API, for integrating neural machine translation capabilities into the application.
+        <p style="text-align: justify;">For Translation APIs, we can utilize which already have before, such as Google Cloud Translation API, Google Gemini API, for integrating neural machine translation capabilities into the application.</p>
 
         **Real-world Applications of Geo-Speak in business communications**
 
-        Above is all you need to know about Geo-Speak application, It is time to look at this tool from business aspects to have a comprehensive understanding of the reasons we may need it.
-    """)
+        <p style="text-align: justify;">Above is all you need to know about Geo-Speak application, It is time to look at this tool from business aspects to have a comprehensive understanding of the reasons we may need it.</p>
+    """, unsafe_allow_html=True)
 
     st.image("img/tumblr_d5dff37917648d2f077d1971bc3335ce_8c896f3e_500.jpg", width=50, use_column_width=True)
 
     st.markdown(
     """
-        In E-commerce industry, Online retailers definitely want to expand their brand name and products across countries over the world. The presence of Geo-Speak is useful for providing multilingual customers with sophisticated supports, product descriptions, and also checkout processes. From there, it fosters the better shopping experience.
+        <p style="text-align: justify;">In E-commerce industry, Online retailers definitely want to expand their brand name and products across countries over the world. The presence of Geo-Speak is useful for providing multilingual customers with sophisticated supports, product descriptions, and also checkout processes. From there, it fosters the better shopping experience.</p>
 
-        For Travel and tourism industry, it is not necessary to explain the role of language anymore. Travel agencies, local businesses, like accommodation, restaurants, or tour guide services need to be specialized in using languages naturally more than any industries. Geo-Speak would help in offering real-time language assistance throughout the customer journeys.
+        <p style="text-align: justify;">For Travel and tourism industry, it is not necessary to explain the role of language anymore. Travel agencies, local businesses, like accommodation, restaurants, or tour guide services need to be specialized in using languages naturally more than any industries. Geo-Speak would help in offering real-time language assistance throughout the customer journeys.</p>
 
-        For Legal and Compliance areas, corporation have to deal with laws across borders. Speaking of this context, strict word choices and comprehensive understandings of words’ meanings would form language barriers for them when they want to expand oversea. Therefore, Geo-Speak with high level of translation accuracy can facilitate the process of conducting documents, contracts, and compliance materials effectively.
+        <p style="text-align: justify;">For Legal and Compliance areas, corporation have to deal with laws across borders. Speaking of this context, strict word choices and comprehensive understandings of words’ meanings would form language barriers for them when they want to expand oversea. Therefore, Geo-Speak with high level of translation accuracy can facilitate the process of conducting documents, contracts, and compliance materials effectively.</p>
 
-        There are still many areas to be mentioned to demonstrate the usefulness of this sophisticated Application.
-    """)
+        <p style="text-align: justify;">There are still many areas to be mentioned to demonstrate the usefulness of this sophisticated Application.</p>
+    """, unsafe_allow_html=True)
 
 # Tab 5: About Us
 with tab5:
