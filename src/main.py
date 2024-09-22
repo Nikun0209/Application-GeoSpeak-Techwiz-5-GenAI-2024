@@ -289,6 +289,8 @@ with tab1:
                 file_name=file_name,
                 mime=mime_type
             )
+        else:
+            st.write("Error")
                 
 # Tab 2: Text translation
 with tab2:
