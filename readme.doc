@@ -55,6 +55,26 @@ To create a virtual environment and install requirements in Python 3.12.3 on dif
 
 `pip install streamlit`
 
+### Installing docx
+
+`pip install python-docx`
+
+### Installing pdf
+
+`pip install PyMuPDF`
+
+`pip install fpdf2`
+
+`pip install pdfplumber reportlab deep-translator`
+
+`pip install fonttools`
+
+## Git
+
+### Installing font
+
+`git clone https://github.com/dejavu-fonts/dejavu-fonts.git`
+
 ### For Windows:
 
 Open the Command Prompt by pressing Win + R, typing "cmd", and pressing Enter.

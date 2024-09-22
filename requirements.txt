@@ -5,3 +5,4 @@ chardet==5.2
 langdetect==1.0.9
 deep_translator==1.11.4
 python-docx==0.8.11
+fpdf2==2.5.6

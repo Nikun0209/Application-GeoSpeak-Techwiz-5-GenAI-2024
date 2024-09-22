@@ -2,11 +2,13 @@ import streamlit as st
 import io
 import chardet
 import hashlib
+import fitz # type: ignore
+
 from datetime import datetime
 from langdetect import detect, DetectorFactory
 from google_gemini import google_gemini_translate
 from deep_translator import GoogleTranslator
-from docx import Document
+from docx import Document # type: ignore
 
 # Ensure consistency in language detection
 DetectorFactory.seed = 0
@@ -63,14 +65,14 @@ with tab1:
 
     # File uploader
     with col2:
-        uploaded_file = st.file_uploader("Supported file types: .txt, .docx", type=["txt", "docx"])
+        uploaded_file = st.file_uploader("Supported file types: .txt, .docx, .pdf", type=["txt", "docx", "pdf"])
 
     # Add HTML and CSS to change the content
     st.markdown(
         """
         <style>
             .e1b2p2ww11 .e1bju1570::before {
-                content: "Please note: We only accept text up to 1000 characters long: .txt, .docx";
+                content: "Please note: We only accept text up to 1000 characters long: .txt, .docx, .pdf";
                 font-size: 12px;
                 color: white;
                 font-family: 'Source Sans Pro', sans-serif;
@@ -172,9 +174,56 @@ with tab1:
                         translated_text = translator.translate(text)
                         st.session_state.translated_text_tab1 = translated_text
                         # st.session_state.uploaded_file_type = 'docx'
+            
+            elif uploaded_file.name.endswith('.pdf'):
+                # Extract text from the PDF
+                with open("temp.pdf", "wb") as f:
+                    f.write(uploaded_file.getbuffer())
 
+                doc = fitz.open("temp.pdf")
+                full_text = ""
+                for page_num in range(len(doc)):
+                    page = doc[page_num]
+                    full_text += page.get_text()
+
+                # Limit the number of characters
+                if len(full_text) > 1000:
+                    st.warning("Limit is 1000 characters.")
+                    st.stop()  # Stop the program
+                else:
+                    source_language = detect(full_text)
+                    language_mapping = {
+                        "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
+                        "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
+                        "Burmese": "my", "Catalan": "ca", "Cebuano": "ceb", "Chinese Simplified": "zh-CN",
+                        "Chinese Traditional": "zh-TW", "Croatian": "hr", "Czech": "cs", "Danish": "da",
+                        "Dutch": "nl", "English": "en", "Finnish": "fi", "French": "fr", "Georgian": "ka",
+                        "German": "de", "Greek": "el", "Gujarati": "gu", "Hausa": "ha", "Hebrew": "he",
+                        "Hindi": "hi", "Hungarian": "hu", "Icelandic": "is", "Igbo": "ig", "Indonesian": "id",
+                        "Italian": "it", "Japanese": "ja", "Javanese": "jv", "Kannada": "kn", "Kazakh": "kk",
+                        "Korean": "ko", "Kurdish": "ku", "Lao": "lo", "Latvian": "lv", "Lithuanian": "lt",
+                        "Malay": "ms", "Malayalam": "ml", "Marathi": "mr", "Nepali": "ne", "Pashto": "ps",
+                        "Persian": "fa", "Polish": "pl", "Portuguese": "pt", "Punjabi": "pa", "Romanian": "ro",
+                        "Russian": "ru", "Serbian": "sr", "Sinhala": "si", "Slovak": "sk", "Somali": "so",
+                        "Spanish": "es", "Swahili": "sw", "Swedish": "sv", "Tagalog": "tl", "Tamil": "ta",
+                        "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
+                        "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
+                    }
+                    target_language_code = language_mapping.get(output_language_tab1)
+
+                    if source_language == target_language_code:
+                        st.warning(f"The content you provided is already in {output_language_tab1}.")
+                        st.stop()  # Stop the program
+                    else:
+                        input_language = language_mapping.get(source_language)
+                        output_language = language_mapping.get(target_language_code)
+
+                        translator = GoogleTranslator(source=source_language, target=target_language_code)
+                        translated_text = translator.translate(full_text)
+                        st.session_state.translated_text_tab1 = translated_text
+                
             else:   
-                st.error("Please upload a file with the extension .docx")
+                st.error("Please upload a file with the extension .txt, .docx, .pdf")
 
     # Display translated result
     if "translated_text_tab1" in st.session_state:
@@ -219,7 +268,29 @@ with tab1:
                 file_name=file_name,
                 mime=mime_type
             )
+        elif uploaded_file.name.endswith('.pdf'):
+            st.write("Translated content")
+            st.success(st.session_state.translated_text_tab1)
 
+            buffer = io.BytesIO()
+            current_time = datetime.now().isoformat()
+            md5_hash = hashlib.md5(current_time.encode()).hexdigest()
+            file_name = f"{md5_hash}.docx"
+            translated_text = st.session_state.translated_text_tab1
+            doc = Document()
+            doc.add_paragraph(translated_text)
+            doc.save(buffer)
+            mime_type = "application/msword"
+
+            buffer.seek(0)
+            st.download_button(
+                label="Download translation",
+                data=buffer,
+                file_name=file_name,
+                mime=mime_type
+            )
+                
+# Tab 2: Text translation
 with tab2:
     col_1, col_2 = st.columns(2)
 
