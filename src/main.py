@@ -489,16 +489,19 @@ with tab5:
     st.write(
         """
         **ABOUT US** \n
-        The Avengers - AI Translator is a text/file translation and chatbot support using GenAI technology.
+        Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams. \n
+        Category: GenAI \n
+        Project: GeoSpeak - AI Translator & Chatbot \n
+
+        Lecturer: MSc. Hồ Nhựt Minh
         
         **THE AVENGERS - AI TRANSLATOR PROJECT MEMBERS**
         - Dương Gia Thành: Main Developer
         - Nguyễn Quốc Anh: Project Manager
-        - Other members:
-            - Nguyễn Quốc Bảo
-            - Phạm Hoàng Tiến
-            - Trần Mai Phương
-            - Lâm Kim Khánh
+        - Nguyễn Quốc Bảo
+        - Phạm Hoàng Tiến
+        - Trần Mai Phương
+        - Lâm Kim Khánh
 
         - Project website - [Visit here](https://theavengers.streamlit.app/)
 
