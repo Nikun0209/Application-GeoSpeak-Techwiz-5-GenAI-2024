@@ -6,6 +6,7 @@ from datetime import datetime
 from langdetect import detect, DetectorFactory
 from google_gemini import google_gemini_translate
 from deep_translator import GoogleTranslator
+from docx import Document
 
 # Ensure consistency in language detection
 DetectorFactory.seed = 0
@@ -62,7 +63,7 @@ with tab1:
 
     # File uploader
     with col2:
-        uploaded_file = st.file_uploader("Supported file types: .txt", type="txt")
+        uploaded_file = st.file_uploader("Supported file types: .txt, .docx", type=["txt", "docx"])
 
     # Add HTML and CSS to change the content
     st.markdown(
@@ -127,31 +128,94 @@ with tab1:
                     else:
                         translated_text = google_gemini_translate(file_contents, None, target_language_code)
                         st.session_state.translated_text_tab1 = translated_text
+            elif uploaded_file.name.endswith('.docx'):
+                doc = Document(uploaded_file)
+                full_text = []
+                for para in doc.paragraphs:
+                    full_text.append(para.text)
+                text = '\n'.join(full_text)
+
+                st.write(text)
+
+                source_language = detect(text)
+                language_mapping = {
+                    "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
+                    "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
+                    "Burmese": "my", "Catalan": "ca", "Cebuano": "ceb", "Chinese Simplified": "zh-CN",
+                    "Chinese Traditional": "zh-TW", "Croatian": "hr", "Czech": "cs", "Danish": "da",
+                    "Dutch": "nl", "English": "en", "Finnish": "fi", "French": "fr", "Georgian": "ka",
+                    "German": "de", "Greek": "el", "Gujarati": "gu", "Hausa": "ha", "Hebrew": "he",
+                    "Hindi": "hi", "Hungarian": "hu", "Icelandic": "is", "Igbo": "ig", "Indonesian": "id",
+                    "Italian": "it", "Japanese": "ja", "Javanese": "jv", "Kannada": "kn", "Kazakh": "kk",
+                    "Korean": "ko", "Kurdish": "ku", "Lao": "lo", "Latvian": "lv", "Lithuanian": "lt",
+                    "Malay": "ms", "Malayalam": "ml", "Marathi": "mr", "Nepali": "ne", "Pashto": "ps",
+                    "Persian": "fa", "Polish": "pl", "Portuguese": "pt", "Punjabi": "pa", "Romanian": "ro",
+                    "Russian": "ru", "Serbian": "sr", "Sinhala": "si", "Slovak": "sk", "Somali": "so",
+                    "Spanish": "es", "Swahili": "sw", "Swedish": "sv", "Tagalog": "tl", "Tamil": "ta",
+                    "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
+                    "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
+                }
+                target_language_code = language_mapping.get(output_language_tab1)
+                
+                if source_language == target_language_code:
+                    st.warning(f"The content you provided is already in {output_language_tab1}.")
+                    st.stop()  # Stop the program
+                else:
+                    input_language = language_mapping.get(source_language)
+                    output_language = language_mapping.get(target_language_code)
+
+                    # Translate text using Google Translate API
+                    translator = GoogleTranslator(source=source_language, target=target_language_code)
+                    translated_text = translator.translate(text)
+                    st.session_state.translated_text_tab1 = translated_text
+                    # st.session_state.uploaded_file_type = 'docx'
+
             else:   
-                st.error("Please upload a file with the extension .txt")
+                st.error("Please upload a file with the extension .docx")
 
     # Display translated result
     if "translated_text_tab1" in st.session_state:
-        st.write("Translated content")
-        st.success(st.session_state.translated_text_tab1)
+        if uploaded_file.name.endswith('.txt'):
+            st.write("Translated content")
+            st.success(st.session_state.translated_text_tab1)
 
-        # Create file name based on current time hashed with MD5
-        current_time = datetime.now().isoformat()
-        md5_hash = hashlib.md5(current_time.encode()).hexdigest()
-        file_name = f"{md5_hash}.txt"
+            # Create file name based on current time hashed with MD5
+            current_time = datetime.now().isoformat()
+            md5_hash = hashlib.md5(current_time.encode()).hexdigest()
+            file_name = f"{md5_hash}.txt"
 
-        # Create .txt file for translated content and provide download link
-        translated_text = st.session_state.translated_text_tab1
-        buffer = io.BytesIO()
-        buffer.write(translated_text.encode('utf-8'))
-        buffer.seek(0)
-        
-        st.download_button(
-            label="Download translation",
-            data=buffer,
-            file_name=file_name,
-            mime="text/plain"
-        )
+            # Create .txt file for translated content and provide download link
+            translated_text = st.session_state.translated_text_tab1
+            buffer = io.BytesIO()
+            buffer.write(translated_text.encode('utf-8'))
+            buffer.seek(0)
+            
+            st.download_button(
+                label="Download translation",
+                data=buffer,
+                file_name=file_name,
+                mime="text/plain"
+            )
+        elif uploaded_file.name.endswith('.docx'):
+            st.write("Translated content")
+            st.success(st.session_state.translated_text_tab1)
+            buffer = io.BytesIO()
+            current_time = datetime.now().isoformat()
+            md5_hash = hashlib.md5(current_time.encode()).hexdigest()
+            file_name = f"{md5_hash}.docx"
+            translated_text = st.session_state.translated_text_tab1
+            doc = Document()
+            doc.add_paragraph(translated_text)
+            doc.save(buffer)
+            mime_type = "application/msword"
+
+            buffer.seek(0)
+            st.download_button(
+                label="Download translation",
+                data=buffer,
+                file_name=file_name,
+                mime=mime_type
+            )
 
 with tab2:
     col_1, col_2 = st.columns(2)
