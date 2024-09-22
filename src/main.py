@@ -6,9 +6,11 @@ import fitz # type: ignore
 
 from datetime import datetime
 from langdetect import detect, DetectorFactory
-from google_gemini import google_gemini_translate
+from google_gemini import google_gemini_translate, api_key, translate_role_for_streamlit
 from deep_translator import GoogleTranslator
 from docx import Document # type: ignore
+from dotenv import load_dotenv # type: ignore
+import google.generativeai as gen_ai # type: ignore
 
 # Ensure consistency in language detection
 DetectorFactory.seed = 0
@@ -359,38 +361,36 @@ with tab2:
 
 # Tab 3: ChatBot
 with tab3:
-    # Function to translate roles between Gemini-Pro and Streamlit's terminology
-    def translate_role_for_streamlit(user_role):
-        if user_role == "model":
-            return "assistant"
-        else:
-            return user_role
+    # Load environment variables
+    load_dotenv()
+
+    # Set up Google Gemini-Pro AI model
+    gen_ai.configure(api_key=api_key)
+    model = gen_ai.GenerativeModel('gemini-pro')
 
     # Initialize chat session in Streamlit if not already present
     if "chat_session" not in st.session_state:
-        st.session_state.chat_session = []
+        st.session_state.chat_session = model.start_chat(history=[])
 
-    # Display chat history (older messages at the top)
-    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
-    for message in st.session_state.chat_session:
-        role = translate_role_for_streamlit(message['role'])
-        with st.chat_message(role):
-            st.markdown(f'<div class="chat-message">{message["text"]}</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Display the chat history
+    for message in st.session_state.chat_session.history:
+        with st.chat_message(translate_role_for_streamlit(message.role)):
+            st.markdown(message.parts[0].text)
 
-    # Input field for user's message (always at the bottom)
     user_prompt = st.chat_input("Enter your question here...")
 
     if user_prompt:
         # Add user's message to chat and display it
-        st.session_state.chat_session.append({"role": "user", "text": user_prompt})
         st.chat_message("user").markdown(user_prompt)
 
-        # Send user's message to Google Gemini API and get response
-        gemini_response = google_gemini_translate(user_prompt)
-        st.session_state.chat_session.append({"role": "assistant", "text": gemini_response})
-        st.chat_message("assistant").markdown(gemini_response)
+        # Send user's message to Gemini-Pro and get the response
+        gemini_response = st.session_state.chat_session.send_message(user_prompt)
 
+        # Display Gemini-Pro's response
+        with st.chat_message("assistant"):
+            st.markdown(gemini_response.text)
+
+# Tab 4: Blog
 with tab4:
     # st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
     st.title("Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams")
@@ -516,4 +516,3 @@ with tab5:
         - Nguyễn Quốc Anh: [anh.datascience@gmail.com](mailto:anh.datascience@gmail.com)
         """
     )
-

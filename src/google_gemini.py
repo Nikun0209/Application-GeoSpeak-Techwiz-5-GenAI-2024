@@ -51,3 +51,9 @@ def google_gemini_translate(input_text, input_language=None, target_language_cod
         print(f"Error querying Gemini API: {e}")
         return None
     
+# Function to translate roles between Gemini-Pro and Streamlit terminology
+def translate_role_for_streamlit(user_role):
+    if user_role == "model":
+        return "assistant"
+    else:
+        return user_role
