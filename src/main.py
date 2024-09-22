@@ -400,7 +400,7 @@ with tab4:
         User guide: [The Avengers - AI Translator · Streamlit](https://youtu.be/6ZnQhEFjJZ8)
     """)
 
-    st.image("img/z5855806767554_aef51eacda4c36fd65660ce9ee04af64.jpg", width=50, use_column_width=True)
+    st.image("img/z5855806767554_aef51eacda4c36fd65660ce9ee04af64.jpg", width=50, caption="The Avengers Team", use_column_width=True)
 
     st.markdown(
     """
@@ -427,7 +427,7 @@ with tab4:
         
     """, unsafe_allow_html=True)
     
-    st.image("img/z5855785979880_853b682305e933c24c9e8eae5c40f52e.jpg", width=50, use_column_width=True)
+    st.image("img/z5855785979880_853b682305e933c24c9e8eae5c40f52e.jpg", width=50, caption="Architecture", use_column_width=True)
 
     st.markdown(
     """
@@ -440,7 +440,7 @@ with tab4:
         <p style="text-align: justify;">At first, users inputs text or text file (.txt, .docx, .pdf extension) in any language forms and choose the desired target language from a drop-down list provided in the web interface. The Embedding API accesses the input information. At this stage, the application use constraints, related to word limitations and extension of a file to check if the file or text is qualified enough to process the further steps. Particularly, in this project, my team set 1000 words as the limitation and “.txt, .docx, .pdf” extension for the standard of file format. Once verified, the input information will be decoded into a high-dimensional embedding vector that captures its semantic essence. This vector is then used to query a vector Database containing precomputed embeddings of parallel corporate or translation sample. The system extracts relevant documents that closely aligned with the source text embedding, comprising paired texts in both source and target languages to guide the translation process. </p>
     """, unsafe_allow_html=True)
 
-    st.image("img/z5855786203327_f6ec2b25a2b6acbed2fdbaabd8c6de88.jpg", width=50, use_column_width=True)
+    st.image("img/z5855786203327_f6ec2b25a2b6acbed2fdbaabd8c6de88.jpg", width=50, caption="User Journey Description", use_column_width=True)
 
     st.markdown(
     """
@@ -451,7 +451,7 @@ with tab4:
         <p style="text-align: justify;">To build Geo-Speak application, we start from scratches that maybe most people find themselves common with terms.</p>
     """, unsafe_allow_html=True)
 
-    st.image("img/z5855785794142_784584c673ba215f438c3d5329e4ed59.jpg", width=50, use_column_width=True)
+    st.image("img/z5855785794142_784584c673ba215f438c3d5329e4ed59.jpg", width=50, caption="Used Technologies", use_column_width=True)
 
     st.markdown(
     """
@@ -466,7 +466,7 @@ with tab4:
         <p style="text-align: justify;">Above is all you need to know about Geo-Speak application, It is time to look at this tool from business aspects to have a comprehensive understanding of the reasons we may need it.</p>
     """, unsafe_allow_html=True)
 
-    st.image("img/tumblr_d5dff37917648d2f077d1971bc3335ce_8c896f3e_500.jpg", width=50, use_column_width=True)
+    st.image("img/tumblr_d5dff37917648d2f077d1971bc3335ce_8c896f3e_500.jpg", width=50, caption="Application GeoSpeak", use_column_width=True)
 
     st.markdown(
     """
