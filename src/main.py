@@ -392,27 +392,33 @@ with tab3:
         st.chat_message("assistant").markdown(gemini_response)
 
 with tab4:
-    st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
-    st.subheader("Leveraging Gen AI for Smart solution of Translation: Geo-Speak Application")
+    # st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
+    st.title("Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams")
+    # st.subheader("Leveraging Gen AI for Smart solution of Translation: Geo-Speak Application")
 
     st.markdown(
     """
-        User guide: [The Avengers - AI Translator · Streamlit](https://youtu.be/6ZnQhEFjJZ8)
+        Category: GenAI \n
+        Project: GeoSpeak - AI Translator & Chatbot \n
+
+        Lecturer: MSc. Hồ Nhựt Minh
+        
+        **THE AVENGERS - AI TRANSLATOR PROJECT MEMBERS**
+        - Dương Gia Thành: Main Developer
+        - Nguyễn Quốc Anh: Project Manager
+        - Nguyễn Quốc Bảo
+        - Phạm Hoàng Tiến
+        - Trần Mai Phương
+        - Lâm Kim Khánh
+
+        Website: [Visit here](https://theavengers.streamlit.app/)\n
+        User guide: [Visit here](https://youtu.be/6ZnQhEFjJZ8)
     """)
 
     st.image("img/z5855806767554_aef51eacda4c36fd65660ce9ee04af64.jpg", width=50, caption="The Avengers Team", use_column_width=True)
 
     st.markdown(
     """
-        **Team: The Avengers** \n
-        **List of members:** \n
-        - Nguyễn Quốc Anh \n
-        - Dương Gia Thành \n
-        - Phạm Hoàng Tiến \n
-        - Nguyễn Quốc Bảo \n
-        - Trần Mai Phương \n
-        - Lâm Kim Khánh
-
         **What is going on with Translation?**
 
         <p style="text-align: justify;">In the fast pace of world, it is common that people are breathing the cosmopolitan atmosphere, even companies. What does it mean? People have engaged in using in diverse languages more than ever before in their workplaces. They utilize languages or linguistic skills in reading and writing documents, listening to foreigners and especially speaking in a manner of responding actively to any information that is not of their “mother tongue” they received. To this point, some may think of many conventional translation tools as a solution which automatically translate any text that they input. It is fair enough to agree, but, the main point is that those tools are just simply doing the job of translation.</p>
@@ -489,7 +495,7 @@ with tab5:
     st.write(
         """
         **ABOUT US** \n
-        Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams. \n
+        Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams \n
         Category: GenAI \n
         Project: GeoSpeak - AI Translator & Chatbot \n
 
@@ -503,7 +509,7 @@ with tab5:
         - Trần Mai Phương
         - Lâm Kim Khánh
 
-        - Project website - [Visit here](https://theavengers.streamlit.app/)
+        Website: [Visit here](https://theavengers.streamlit.app/)\n
 
         **CONTACT**
         - Dương Gia Thành: [duonggiathanh3819@gmail.com](mailto:duonggiathanh3819@gmail.com)
