@@ -50,17 +50,8 @@ with tab1:
     # Select output language
     with col1:
         output_languages_list = [
-            'Afrikaans', 'Albanian', 'Amharic', 'Arabic', 'Azerbaijani', 'Bengali',
-            'Bosnian', 'Bulgarian', 'Burmese', 'Catalan', 'Cebuano', 'Chinese Simplified',
-            'Chinese Traditional', 'Croatian', 'Czech', 'Danish', 'Dutch', 'English',
-            'Finnish', 'French', 'Georgian', 'German', 'Greek', 'Gujarati', 'Hausa',
-            'Hebrew', 'Hindi', 'Hungarian', 'Icelandic', 'Igbo', 'Indonesian', 'Italian',
-            'Japanese', 'Javanese', 'Kannada', 'Kazakh', 'Korean', 'Kurdish', 'Lao',
-            'Latvian', 'Lithuanian', 'Malay', 'Malayalam', 'Marathi', 'Nepali', 'Pashto',
-            'Persian', 'Polish', 'Portuguese', 'Punjabi', 'Romanian', 'Russian', 'Serbian',
-            'Sinhala', 'Slovak', 'Somali', 'Spanish', 'Swahili', 'Swedish', 'Tagalog',
-            'Tamil', 'Telugu', 'Thai', 'Turkish', 'Ukrainian', 'Urdu', 'Uzbek', 'Vietnamese',
-            'Yoruba', 'Zulu'
+            'Chinese Simplified', 'Chinese Traditional', 'English', 
+            'Vietnamese', 'Korean', 'Japanese'
         ]
 
         output_language_tab1 = st.selectbox(label="Output language", options=output_languages_list, key="output_language_tab1")
@@ -108,22 +99,14 @@ with tab1:
                 else:        
                     source_language = detect(file_contents)
                     language_mapping = {
-                        "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
-                        "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
-                        "Burmese": "my", "Catalan": "ca", "Cebuano": "ceb", "Chinese Simplified": "zh-CN",
-                        "Chinese Traditional": "zh-TW", "Croatian": "hr", "Czech": "cs", "Danish": "da",
-                        "Dutch": "nl", "English": "en", "Finnish": "fi", "French": "fr", "Georgian": "ka",
-                        "German": "de", "Greek": "el", "Gujarati": "gu", "Hausa": "ha", "Hebrew": "he",
-                        "Hindi": "hi", "Hungarian": "hu", "Icelandic": "is", "Igbo": "ig", "Indonesian": "id",
-                        "Italian": "it", "Japanese": "ja", "Javanese": "jv", "Kannada": "kn", "Kazakh": "kk",
-                        "Korean": "ko", "Kurdish": "ku", "Lao": "lo", "Latvian": "lv", "Lithuanian": "lt",
-                        "Malay": "ms", "Malayalam": "ml", "Marathi": "mr", "Nepali": "ne", "Pashto": "ps",
-                        "Persian": "fa", "Polish": "pl", "Portuguese": "pt", "Punjabi": "pa", "Romanian": "ro",
-                        "Russian": "ru", "Serbian": "sr", "Sinhala": "si", "Slovak": "sk", "Somali": "so",
-                        "Spanish": "es", "Swahili": "sw", "Swedish": "sv", "Tagalog": "tl", "Tamil": "ta",
-                        "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
-                        "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
+                        "Chinese Simplified": "zh-CN",
+                        "Chinese Traditional": "zh-TW",
+                        "English": "en",
+                        "Vietnamese": "vi",
+                        "Korean": "ko",
+                        "Japanese": "ja"
                     }
+
                     target_language_code = language_mapping.get(output_language_tab1)
 
                     if source_language == target_language_code:
@@ -146,21 +129,12 @@ with tab1:
                 else:
                     source_language = detect(text)
                     language_mapping = {
-                        "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
-                        "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
-                        "Burmese": "my", "Catalan": "ca", "Cebuano": "ceb", "Chinese Simplified": "zh-CN",
-                        "Chinese Traditional": "zh-TW", "Croatian": "hr", "Czech": "cs", "Danish": "da",
-                        "Dutch": "nl", "English": "en", "Finnish": "fi", "French": "fr", "Georgian": "ka",
-                        "German": "de", "Greek": "el", "Gujarati": "gu", "Hausa": "ha", "Hebrew": "he",
-                        "Hindi": "hi", "Hungarian": "hu", "Icelandic": "is", "Igbo": "ig", "Indonesian": "id",
-                        "Italian": "it", "Japanese": "ja", "Javanese": "jv", "Kannada": "kn", "Kazakh": "kk",
-                        "Korean": "ko", "Kurdish": "ku", "Lao": "lo", "Latvian": "lv", "Lithuanian": "lt",
-                        "Malay": "ms", "Malayalam": "ml", "Marathi": "mr", "Nepali": "ne", "Pashto": "ps",
-                        "Persian": "fa", "Polish": "pl", "Portuguese": "pt", "Punjabi": "pa", "Romanian": "ro",
-                        "Russian": "ru", "Serbian": "sr", "Sinhala": "si", "Slovak": "sk", "Somali": "so",
-                        "Spanish": "es", "Swahili": "sw", "Swedish": "sv", "Tagalog": "tl", "Tamil": "ta",
-                        "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
-                        "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
+                        "Chinese Simplified": "zh-CN",
+                        "Chinese Traditional": "zh-TW",
+                        "English": "en",
+                        "Vietnamese": "vi",
+                        "Korean": "ko",
+                        "Japanese": "ja"
                     }
                     target_language_code = language_mapping.get(output_language_tab1)
                     
@@ -195,21 +169,12 @@ with tab1:
                 else:
                     source_language = detect(full_text)
                     language_mapping = {
-                        "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
-                        "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
-                        "Burmese": "my", "Catalan": "ca", "Cebuano": "ceb", "Chinese Simplified": "zh-CN",
-                        "Chinese Traditional": "zh-TW", "Croatian": "hr", "Czech": "cs", "Danish": "da",
-                        "Dutch": "nl", "English": "en", "Finnish": "fi", "French": "fr", "Georgian": "ka",
-                        "German": "de", "Greek": "el", "Gujarati": "gu", "Hausa": "ha", "Hebrew": "he",
-                        "Hindi": "hi", "Hungarian": "hu", "Icelandic": "is", "Igbo": "ig", "Indonesian": "id",
-                        "Italian": "it", "Japanese": "ja", "Javanese": "jv", "Kannada": "kn", "Kazakh": "kk",
-                        "Korean": "ko", "Kurdish": "ku", "Lao": "lo", "Latvian": "lv", "Lithuanian": "lt",
-                        "Malay": "ms", "Malayalam": "ml", "Marathi": "mr", "Nepali": "ne", "Pashto": "ps",
-                        "Persian": "fa", "Polish": "pl", "Portuguese": "pt", "Punjabi": "pa", "Romanian": "ro",
-                        "Russian": "ru", "Serbian": "sr", "Sinhala": "si", "Slovak": "sk", "Somali": "so",
-                        "Spanish": "es", "Swahili": "sw", "Swedish": "sv", "Tagalog": "tl", "Tamil": "ta",
-                        "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
-                        "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
+                        "Chinese Simplified": "zh-CN",
+                        "Chinese Traditional": "zh-TW",
+                        "English": "en",
+                        "Vietnamese": "vi",
+                        "Korean": "ko",
+                        "Japanese": "ja"
                     }
                     target_language_code = language_mapping.get(output_language_tab1)
 
@@ -301,17 +266,8 @@ with tab2:
     # Column for selecting input language
     with col_1:
         input_languages_list = [
-            'Afrikaans', 'Albanian', 'Amharic', 'Arabic', 'Azerbaijani', 'Bengali',
-            'Bosnian', 'Bulgarian', 'Burmese', 'Catalan', 'Cebuano', 'Chinese Simplified',
-            'Chinese Traditional', 'Croatian', 'Czech', 'Danish', 'Dutch', 'English',
-            'Finnish', 'French', 'Georgian', 'German', 'Greek', 'Gujarati', 'Hausa',
-            'Hebrew', 'Hindi', 'Hungarian', 'Icelandic', 'Igbo', 'Indonesian', 'Italian',
-            'Japanese', 'Javanese', 'Kannada', 'Kazakh', 'Korean', 'Kurdish', 'Lao',
-            'Latvian', 'Lithuanian', 'Malay', 'Malayalam', 'Marathi', 'Nepali', 'Pashto',
-            'Persian', 'Polish', 'Portuguese', 'Punjabi', 'Romanian', 'Russian', 'Serbian',
-            'Sinhala', 'Slovak', 'Somali', 'Spanish', 'Swahili', 'Swedish', 'Tagalog',
-            'Tamil', 'Telugu', 'Thai', 'Turkish', 'Ukrainian', 'Urdu', 'Uzbek', 'Vietnamese',
-            'Yoruba', 'Zulu'
+            'Chinese Simplified', 'Chinese Traditional', 'English', 
+            'Vietnamese', 'Korean', 'Japanese'
         ]
         input_language_tab2 = st.selectbox(label="Input language", options=input_languages_list, key="input_language_tab2")
 
@@ -329,22 +285,13 @@ with tab2:
                 st.stop()  # Stop the program
             else:
                 language_mapping = {
-                    "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Arabic": "ar",
-                    "Azerbaijani": "az", "Bengali": "bn", "Bosnian": "bs", "Bulgarian": "bg",
-                    "Burmese": "my", "Catalan": "ca", "Cebuano": "ceb", "Chinese Simplified": "zh-CN",
-                    "Chinese Traditional": "zh-TW", "Croatian": "hr", "Czech": "cs", "Danish": "da",
-                    "Dutch": "nl", "English": "en", "Finnish": "fi", "French": "fr", "Georgian": "ka",
-                    "German": "de", "Greek": "el", "Gujarati": "gu", "Hausa": "ha", "Hebrew": "he",
-                    "Hindi": "hi", "Hungarian": "hu", "Icelandic": "is", "Igbo": "ig", "Indonesian": "id",
-                    "Italian": "it", "Japanese": "ja", "Javanese": "jv", "Kannada": "kn", "Kazakh": "kk",
-                    "Korean": "ko", "Kurdish": "ku", "Lao": "lo", "Latvian": "lv", "Lithuanian": "lt",
-                    "Malay": "ms", "Malayalam": "ml", "Marathi": "mr", "Nepali": "ne", "Pashto": "ps",
-                    "Persian": "fa", "Polish": "pl", "Portuguese": "pt", "Punjabi": "pa", "Romanian": "ro",
-                    "Russian": "ru", "Serbian": "sr", "Sinhala": "si", "Slovak": "sk", "Somali": "so",
-                    "Spanish": "es", "Swahili": "sw", "Swedish": "sv", "Tagalog": "tl", "Tamil": "ta",
-                    "Telugu": "te", "Thai": "th", "Turkish": "tr", "Ukrainian": "uk", "Urdu": "ur",
-                    "Uzbek": "uz", "Vietnamese": "vi", "Yoruba": "yo", "Zulu": "zu"
-                }               
+                    "Chinese Simplified": "zh-CN",
+                    "Chinese Traditional": "zh-TW",
+                    "English": "en",
+                    "Vietnamese": "vi",
+                    "Korean": "ko",
+                    "Japanese": "ja"
+                }              
                 input_language = language_mapping.get(input_language_tab2)
                 output_language = language_mapping.get(output_language_tab2)
 
