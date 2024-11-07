@@ -55,7 +55,7 @@ with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
         options=["Documents", "Text", "ChatBot", "Stability", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
-        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb-fill"],
+        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb"],
         menu_icon="menu-up",
         default_index=0,
         # orientation="horizontal"
