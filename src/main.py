@@ -53,8 +53,8 @@ st.markdown("""
 with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
-        options=["Documents", "Text", "Gemini", "Stability", "Blog", "About Us"],
-        icons=["file-earmark-text", "alphabet", "robot", "card-image", "book", "lightbulb-fill"],
+        options=["Documents", "Text", "ChatBot", "Stability", "Blog", "About Us"],
+        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "book", "lightbulb-fill"],
         menu_icon="menu-up",
         default_index=0,
         # orientation="horizontal"
@@ -323,8 +323,8 @@ if selected == "Text":
     if "translated_text_tab2" in st.session_state:
         st.success(st.session_state.translated_text_tab2)
 
-# Tab 3: Gemini
-if selected == "Gemini":
+# Tab 3: ChatBot    
+if selected == "ChatBot":
     # Load environment variables
     load_dotenv()
 
