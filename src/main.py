@@ -54,7 +54,7 @@ st.markdown("""
 with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
-        options=["Documents", "Text", "ChatBot", "Stability", "PDF to Word", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
+        options=["Documents", "Text", "ChatBot", "Stability", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
         icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb-fill"],
         menu_icon="menu-up",
         default_index=0,
@@ -403,9 +403,9 @@ if selected == "Stability":
         st.error("Please enter an image description!")
 
 # Tab 5: PDF to Word
-if selected == "PDF to Word":
+if selected == "PDF to DOC":
     # Upload PDF file from user
-    uploaded_file = st.file_uploader("Convert PDF to Word", type=["pdf"])
+    uploaded_file = st.file_uploader("Convert PDF to DOC", type=["pdf"])
 
     if uploaded_file is not None:
         original_filename = os.path.splitext(uploaded_file.name)[0]
