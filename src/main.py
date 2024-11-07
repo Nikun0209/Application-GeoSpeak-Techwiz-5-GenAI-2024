@@ -407,6 +407,8 @@ if selected == "PDF to Word":
     uploaded_file = st.file_uploader("Convert PDF to Word", type=["pdf"])
 
     if uploaded_file is not None:
+        original_filename = os.path.splitext(uploaded_file.name)[0]
+
         # Create a temporary file to save the uploaded file
         with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
             temp_pdf.write(uploaded_file.getbuffer())
@@ -421,12 +423,14 @@ if selected == "PDF to Word":
         # Display a success message and provide a download link for the Word file
         st.success("Conversion successful!")
         
+        new_filename = f"{original_filename}_the_avengers.docx"
+
         # Create a button to download the Word file
         with open(output_file, "rb") as f:
             download_button = st.download_button(
-                label="Download Word file",
+                label="Download",
                 data=f,
-                file_name="output.docx",
+                file_name=new_filename,
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             )
 
