@@ -34,7 +34,6 @@ st.title("🤖 The Avengers - AI Translator")
 
 # Use CSS to position the small subtitle text
 st.markdown("""
-            
     <style>
     .subtitle {
         position: absolute;
@@ -390,7 +389,7 @@ if selected == "Stability":
                     img = Image.open(io.BytesIO(artifact.binary))
 
                     # Display the image on the web interface
-                    st.image(img, caption="The image is created from your description", use_container_width=True)
+                    st.image(img, caption="The image is created from your description")
     else:
         st.error("Please enter an image description!")
 
