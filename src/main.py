@@ -1,5 +1,6 @@
 import streamlit as st
 import io
+import os
 import chardet
 import requests
 import hashlib
@@ -14,12 +15,11 @@ from docx import Document # type: ignore
 from dotenv import load_dotenv # type: ignore
 from streamlit_option_menu import option_menu
 from stability import stability_api_key   
-
-
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 from stability_sdk import client
-import io
 from PIL import Image
+from pdf2docx import Converter
+from tempfile import NamedTemporaryFile
 
 # Ensure consistency in language detection
 DetectorFactory.seed = 0
@@ -53,8 +53,8 @@ st.markdown("""
 with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
-        options=["Documents", "Text", "ChatBot", "Stability", "Blog", "About Us"],
-        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "book", "lightbulb-fill"],
+        options=["Documents", "Text", "ChatBot", "Stability", "PDF to Word", "Blog", "About Us"],
+        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-word-fill", "book", "lightbulb-fill"],
         menu_icon="menu-up",
         default_index=0,
         # orientation="horizontal"
@@ -401,7 +401,47 @@ if selected == "Stability":
     else:
         st.error("Please enter an image description!")
 
-# Tab 5: Blog
+# Tab 5: PDF -> Word
+if selected == "PDF to Word":
+    # Upload PDF file from user
+    uploaded_file = st.file_uploader("Convert PDF to Word", type=["pdf"])
+
+    if uploaded_file is not None:
+        # Create a temporary file to save the uploaded file
+        with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
+            temp_pdf.write(uploaded_file.getbuffer())
+            temp_pdf_path = temp_pdf.name
+
+        # Convert from PDF to Word
+        cv = Converter(temp_pdf_path)
+        output_file = "output.docx"
+        cv.convert(output_file, start=0, end=None)
+        cv.close()
+
+        # Display a success message and provide a download link for the Word file
+        st.success("Conversion successful!")
+        
+        # Create a button to download the Word file
+        with open(output_file, "rb") as f:
+            download_button = st.download_button(
+                label="Download Word file",
+                data=f,
+                file_name="output.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            )
+
+        # Check if the user has clicked the download button
+        if download_button:
+            # After downloading, delete the temporary files
+            try:
+                if os.path.exists(temp_pdf_path):
+                    os.remove(temp_pdf_path)
+                if os.path.exists(output_file):
+                    os.remove(output_file)
+            except Exception as e:
+                st.error(f"An error occurred while deleting the files: {e}")
+
+# Tab 6: Blog
 if selected == "Blog":
      # st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
     st.title("Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams")
@@ -501,7 +541,7 @@ if selected == "Blog":
         <p style="text-align: justify;">There are still many areas to be mentioned to demonstrate the usefulness of this sophisticated Application.</p>
     """, unsafe_allow_html=True)
 
-# Tab 6: About Us
+# Tab 7: About Us
 if selected == "About Us":
     col1, col2, col3 = st.columns(3)
 
