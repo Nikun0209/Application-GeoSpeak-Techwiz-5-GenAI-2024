@@ -54,8 +54,8 @@ st.markdown("""
 with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
-        options=["Documents", "Text", "ChatBot", "Stability", "PDF to Word", "PDF to PNG", "Blog", "About Us"],
-        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-word-fill", "file-pdf-fill", "book", "lightbulb-fill"],
+        options=["Documents", "Text", "ChatBot", "Stability", "PDF to Word", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
+        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb-fill"],
         menu_icon="menu-up",
         default_index=0,
         # orientation="horizontal"
@@ -503,7 +503,65 @@ if selected == "PDF to PNG":
         except Exception as e:
             st.error(f"An error occurred while deleting files: {e}")
 
-# Tab 7: Blog
+# Tab 7: PDF to JPG
+if selected == "PDF to JPG":
+    # Upload PDF file from the user
+    uploaded_file = st.file_uploader("Convert PDF to JPG", type=["pdf"])
+
+    if uploaded_file is not None:
+        # Get the original file name without the extension
+        original_file_name = uploaded_file.name.rsplit('.', 1)[0]
+
+        # Create a temporary file to save the uploaded file
+        with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
+            temp_pdf.write(uploaded_file.getbuffer())
+            temp_pdf_path = temp_pdf.name
+
+        # Open the PDF file and convert each page to JPG
+        pdf_document = fitz.open(temp_pdf_path)
+        jpg_files = []
+
+        for page_number in range(len(pdf_document)):
+            page = pdf_document.load_page(page_number)
+            pix = page.get_pixmap()
+
+            # Convert the pixmap to a PIL Image
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+
+            # Determine the output JPG file name
+            if len(pdf_document) == 1:
+                output_jpg_name = f"{original_file_name}_the_avengers.jpg"
+            else:
+                output_jpg_name = f"{original_file_name}_the_avengers_page_{page_number + 1}.jpg"
+
+            # Save the image to an in-memory byte stream as JPG
+            jpg_io = io.BytesIO()
+            img.save(jpg_io, format="JPEG", quality=90)  # Adjust quality if necessary
+            jpg_io.seek(0)  # Rewind to the start of the byte stream
+            jpg_files.append((output_jpg_name, jpg_io))
+
+        pdf_document.close()
+
+        # Display success message and provide download links for JPG images
+        st.success("Conversion successful!")
+
+        # Create download buttons for JPG images from memory
+        for jpg_name, jpg_io in jpg_files:
+            st.download_button(
+                label=f"Download {jpg_name}",
+                data=jpg_io,
+                file_name=jpg_name,
+                mime="image/jpeg"
+            )
+
+        # Delete the temporary PDF file
+        try:
+            if os.path.exists(temp_pdf_path):
+                os.remove(temp_pdf_path)
+        except Exception as e:
+            st.error(f"An error occurred while deleting files: {e}")
+
+# Tab 8: Blog
 if selected == "Blog":
      # st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
     st.title("Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams")
@@ -603,7 +661,7 @@ if selected == "Blog":
         <p style="text-align: justify;">There are still many areas to be mentioned to demonstrate the usefulness of this sophisticated Application.</p>
     """, unsafe_allow_html=True)
 
-# Tab 8: About Us
+# Tab 9: About Us
 if selected == "About Us":
     col1, col2, col3 = st.columns(3)
 
