@@ -1,16 +1,25 @@
 import streamlit as st
 import io
 import chardet
+import requests
 import hashlib
 import fitz # type: ignore
+import google.generativeai as gen_ai # type: ignore
 
 from datetime import datetime
 from langdetect import detect, DetectorFactory
-from google_gemini import google_gemini_translate, api_key, translate_role_for_streamlit
+from google_gemini import google_gemini_translate, api_key, api_url, translate_role_for_streamlit
 from deep_translator import GoogleTranslator
 from docx import Document # type: ignore
 from dotenv import load_dotenv # type: ignore
-import google.generativeai as gen_ai # type: ignore
+from streamlit_option_menu import option_menu
+from stability import stability_api_key   
+
+
+import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
+from stability_sdk import client
+import io
+from PIL import Image
 
 # Ensure consistency in language detection
 DetectorFactory.seed = 0
@@ -37,14 +46,23 @@ st.markdown("""
     </style>
             
     <div class="subtitle">Capture semantic meaning!</div>
+    <hr>
             
     """, unsafe_allow_html=True)
 
-# Create navigation tabs
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["📑 Documents", "🔤 Text", "🤖 ChatBot", "📖 Blog", "💡 About Us"])
+# Create sidebar
+with st.sidebar:
+    selected =  option_menu(
+        menu_title="Menu",
+        options=["Documents", "Text", "Gemini", "Stability", "Blog", "About Us"],
+        icons=["file-earmark-text", "alphabet", "robot", "card-image", "book", "lightbulb-fill"],
+        menu_icon="menu-up",
+        default_index=0,
+        # orientation="horizontal"
+    )
 
 # Tab 1: Document translation
-with tab1:
+if selected == "Documents":
     col1, col2 = st.columns(2)
 
     # Select output language
@@ -258,9 +276,9 @@ with tab1:
             )
         else:
             st.write("Error")
-                
+
 # Tab 2: Text translation
-with tab2:
+if selected == "Text":
     col_1, col_2 = st.columns(2)
 
     # Column for selecting input language
@@ -306,8 +324,8 @@ with tab2:
     if "translated_text_tab2" in st.session_state:
         st.success(st.session_state.translated_text_tab2)
 
-# Tab 3: ChatBot
-with tab3:
+# Tab 3: Gemini
+if selected == "Gemini":
     # Load environment variables
     load_dotenv()
 
@@ -330,16 +348,55 @@ with tab3:
         # Add user's message to chat and display it
         st.chat_message("user").markdown(user_prompt)
 
-        # Send user's message to Gemini-Pro and get the response
-        gemini_response = st.session_state.chat_session.send_message(user_prompt)
+        try:
+            # Send user's message to Gemini-Pro and get the response
+            gemini_response = st.session_state.chat_session.send_message(user_prompt)
 
-        # Display Gemini-Pro's response
-        with st.chat_message("assistant"):
-            st.markdown(gemini_response.text)
+            # Display Gemini-Pro's response
+            with st.chat_message("assistant"):
+                st.markdown(gemini_response.text)
 
-# Tab 4: Blog
-with tab4:
-    # st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
+        except Exception as e:
+            # Catch any exception and display an error message
+            st.error(f"An error occurred: {str(e)}")
+
+# Tab 4: Stability
+if selected == "Stability":
+    # Get the image description from the user
+    prompt = st.chat_input("Describe an image you want to create")
+    
+    if prompt:  # Check if the user has entered a description
+
+        # Initialize the Stability AI client
+        stability_api = client.StabilityInference(
+            key=stability_api_key,  # Your API key
+            verbose=True,
+        )
+
+        # Send the request to generate an image
+        answers = stability_api.generate(
+            prompt=prompt,
+            seed=12345,  # Optional: Set a seed to create reproducible results
+            steps=50,  # Number of steps for image creation
+        )
+
+        # Process the response from Stability AI
+        for resp in answers:
+            for artifact in resp.artifacts:
+                if artifact.finish_reason == generation.FILTER:
+                    st.error("Request filtered due to NSFW content")
+                if artifact.type == generation.ARTIFACT_IMAGE:
+                    # Open the image from binary data and save it to disk
+                    img = Image.open(io.BytesIO(artifact.binary))
+
+                    # Display the image on the web interface
+                    st.image(img, caption="The image is created from your description", use_container_width=True)
+    else:
+        st.error("Please enter an image description!")
+
+# Tab 5: Blog
+if selected == "Blog":
+     # st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
     st.title("Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams")
     # st.subheader("Leveraging Gen AI for Smart solution of Translation: Geo-Speak Application")
 
@@ -362,7 +419,12 @@ with tab4:
         User guide: [Visit here](https://youtu.be/6ZnQhEFjJZ8)
     """)
 
-    st.image("img/z5855806767554_aef51eacda4c36fd65660ce9ee04af64.jpg", width=50, caption="The Avengers Team", use_column_width=True)
+    st.image(
+        "img/z5855806767554_aef51eacda4c36fd65660ce9ee04af64.jpg", 
+        width=50, 
+        caption="The Avengers Team", 
+        use_container_width=True
+    )
 
     st.markdown(
     """
@@ -380,7 +442,7 @@ with tab4:
         
     """, unsafe_allow_html=True)
     
-    st.image("img/z5855785979880_853b682305e933c24c9e8eae5c40f52e.jpg", width=50, caption="Architecture", use_column_width=True)
+    st.image("img/z5855785979880_853b682305e933c24c9e8eae5c40f52e.jpg", width=50, caption="Architecture", use_container_width=True)
 
     st.markdown(
     """
@@ -393,7 +455,7 @@ with tab4:
         <p style="text-align: justify;">At first, users inputs text or text file (.txt, .docx, .pdf extension) in any language forms and choose the desired target language from a drop-down list provided in the web interface. The Embedding API accesses the input information. At this stage, the application use constraints, related to word limitations and extension of a file to check if the file or text is qualified enough to process the further steps. Particularly, in this project, my team set 1000 words as the limitation and “.txt, .docx, .pdf” extension for the standard of file format. Once verified, the input information will be decoded into a high-dimensional embedding vector that captures its semantic essence. This vector is then used to query a vector Database containing precomputed embeddings of parallel corporate or translation sample. The system extracts relevant documents that closely aligned with the source text embedding, comprising paired texts in both source and target languages to guide the translation process. </p>
     """, unsafe_allow_html=True)
 
-    st.image("img/z5855786203327_f6ec2b25a2b6acbed2fdbaabd8c6de88.jpg", width=50, caption="User Journey Description", use_column_width=True)
+    st.image("img/z5855786203327_f6ec2b25a2b6acbed2fdbaabd8c6de88.jpg", width=50, caption="User Journey Description", use_container_width=True)
 
     st.markdown(
     """
@@ -404,7 +466,7 @@ with tab4:
         <p style="text-align: justify;">To build Geo-Speak application, we start from scratches that maybe most people find themselves common with terms.</p>
     """, unsafe_allow_html=True)
 
-    st.image("img/z5855785794142_784584c673ba215f438c3d5329e4ed59.jpg", width=50, caption="Used Technologies", use_column_width=True)
+    st.image("img/z5855785794142_784584c673ba215f438c3d5329e4ed59.jpg", width=50, caption="Used Technologies", use_container_width=True)
 
     st.markdown(
     """
@@ -419,7 +481,7 @@ with tab4:
         <p style="text-align: justify;">Above is all you need to know about Geo-Speak application, It is time to look at this tool from business aspects to have a comprehensive understanding of the reasons we may need it.</p>
     """, unsafe_allow_html=True)
 
-    st.image("img/tumblr_d5dff37917648d2f077d1971bc3335ce_8c896f3e_500.jpg", width=50, caption="Application GeoSpeak", use_column_width=True)
+    st.image("img/tumblr_d5dff37917648d2f077d1971bc3335ce_8c896f3e_500.jpg", width=50, caption="Application GeoSpeak", use_container_width=True)
 
     st.markdown(
     """
@@ -432,12 +494,17 @@ with tab4:
         <p style="text-align: justify;">There are still many areas to be mentioned to demonstrate the usefulness of this sophisticated Application.</p>
     """, unsafe_allow_html=True)
 
-# Tab 5: About Us
-with tab5:
+# Tab 6: About Us
+if selected == "About Us":
     col1, col2, col3 = st.columns(3)
 
     with col2:
-        st.image("img/z5855663862790_aa6a77c21ae95ad7f83fb3eccb262482.jpg", width=50,  caption="The Avengers Team", use_column_width=True)
+        st.image(
+            "img/z5855663862790_aa6a77c21ae95ad7f83fb3eccb262482.jpg", 
+            width=50,  
+            caption="The Avengers Team", 
+            use_container_width=True
+        )
 
     st.write(
         """
