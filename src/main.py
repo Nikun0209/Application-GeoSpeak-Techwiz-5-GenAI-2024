@@ -2,6 +2,7 @@ import streamlit as st
 import io
 import os
 import chardet
+import fitz  # PyMuPDF
 import requests
 import hashlib
 import fitz # type: ignore
@@ -53,8 +54,8 @@ st.markdown("""
 with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
-        options=["Documents", "Text", "ChatBot", "Stability", "PDF to Word", "Blog", "About Us"],
-        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-word-fill", "book", "lightbulb-fill"],
+        options=["Documents", "Text", "ChatBot", "Stability", "PDF to Word", "PDF to PNG", "Blog", "About Us"],
+        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-word-fill", "file-pdf-fill", "book", "lightbulb-fill"],
         menu_icon="menu-up",
         default_index=0,
         # orientation="horizontal"
@@ -401,7 +402,7 @@ if selected == "Stability":
     else:
         st.error("Please enter an image description!")
 
-# Tab 5: PDF -> Word
+# Tab 5: PDF to Word
 if selected == "PDF to Word":
     # Upload PDF file from user
     uploaded_file = st.file_uploader("Convert PDF to Word", type=["pdf"])
@@ -436,7 +437,6 @@ if selected == "PDF to Word":
 
         # Check if the user has clicked the download button
         if download_button:
-            # After downloading, delete the temporary files
             try:
                 if os.path.exists(temp_pdf_path):
                     os.remove(temp_pdf_path)
@@ -445,7 +445,65 @@ if selected == "PDF to Word":
             except Exception as e:
                 st.error(f"An error occurred while deleting the files: {e}")
 
-# Tab 6: Blog
+# Tab 6: PDF to PNG
+if selected == "PDF to PNG":
+    # Upload PDF file from the user
+    uploaded_file = st.file_uploader("Convert PDF to PNG", type=["pdf"])
+
+    if uploaded_file is not None:
+        # Get the original file name without the extension
+        original_file_name = uploaded_file.name.rsplit('.', 1)[0]
+
+        # Create a temporary file to save the uploaded file
+        with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
+            temp_pdf.write(uploaded_file.getbuffer())
+            temp_pdf_path = temp_pdf.name
+
+        # Open the PDF file and convert each page to PNG
+        pdf_document = fitz.open(temp_pdf_path)
+        png_files = []
+
+        for page_number in range(len(pdf_document)):
+            page = pdf_document.load_page(page_number)
+            pix = page.get_pixmap()
+
+            # Convert the pixmap to a PIL Image
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+
+            # Determine the output PNG file name
+            if len(pdf_document) == 1:
+                output_png_name = f"{original_file_name}_the_avengers.png"
+            else:
+                output_png_name = f"{original_file_name}_the_avengers_page_{page_number + 1}.png"
+
+            # Save the image to an in-memory byte stream
+            png_io = io.BytesIO()
+            img.save(png_io, format="PNG")
+            png_io.seek(0)  # Rewind to the start of the byte stream
+            png_files.append((output_png_name, png_io))
+
+        pdf_document.close()
+
+        # Display success message and provide download links for PNG images
+        st.success("Conversion successful!")
+
+        # Create download buttons for PNG images from memory
+        for png_name, png_io in png_files:
+            st.download_button(
+                label=f"Download {png_name}",
+                data=png_io,
+                file_name=png_name,
+                mime="image/png"
+            )
+
+        # Delete the temporary PDF file
+        try:
+            if os.path.exists(temp_pdf_path):
+                os.remove(temp_pdf_path)
+        except Exception as e:
+            st.error(f"An error occurred while deleting files: {e}")
+
+# Tab 7: Blog
 if selected == "Blog":
      # st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
     st.title("Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams")
@@ -545,7 +603,7 @@ if selected == "Blog":
         <p style="text-align: justify;">There are still many areas to be mentioned to demonstrate the usefulness of this sophisticated Application.</p>
     """, unsafe_allow_html=True)
 
-# Tab 7: About Us
+# Tab 8: About Us
 if selected == "About Us":
     col1, col2, col3 = st.columns(3)
 
