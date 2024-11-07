@@ -7,7 +7,7 @@ import fitz # type: ignore
 import google.generativeai as gen_ai # type: ignore
 
 from datetime import datetime
-from langdetect import detect, DetectorFactory
+from langdetect import detect, DetectorFactory, LangDetectException
 from google_gemini import google_gemini_translate, api_key, api_url, translate_role_for_streamlit
 from deep_translator import GoogleTranslator
 from docx import Document # type: ignore
@@ -365,31 +365,39 @@ if selected == "Stability":
     prompt = st.chat_input("Describe an image you want to create")
     
     if prompt:  # Check if the user has entered a description
+        try:
+            # Detect the language of the prompt
+            language = detect(prompt)
+            
+            if language == "en":
+                # Initialize the Stability AI client
+                stability_api = client.StabilityInference(
+                    key=stability_api_key,  # Your API key
+                    verbose=True,
+                )
 
-        # Initialize the Stability AI client
-        stability_api = client.StabilityInference(
-            key=stability_api_key,  # Your API key
-            verbose=True,
-        )
+                # Send the request to generate an image
+                answers = stability_api.generate(
+                    prompt=prompt,
+                    seed=12345,  # Optional: Set a seed to create reproducible results
+                    steps=50,  # Number of steps for image creation
+                )
 
-        # Send the request to generate an image
-        answers = stability_api.generate(
-            prompt=prompt,
-            seed=12345,  # Optional: Set a seed to create reproducible results
-            steps=50,  # Number of steps for image creation
-        )
+                # Process the response from Stability AI
+                for resp in answers:
+                    for artifact in resp.artifacts:
+                        if artifact.finish_reason == generation.FILTER:
+                            st.error("Request filtered due to NSFW content")
+                        if artifact.type == generation.ARTIFACT_IMAGE:
+                            # Open the image from binary data and save it to disk
+                            img = Image.open(io.BytesIO(artifact.binary))
 
-        # Process the response from Stability AI
-        for resp in answers:
-            for artifact in resp.artifacts:
-                if artifact.finish_reason == generation.FILTER:
-                    st.error("Request filtered due to NSFW content")
-                if artifact.type == generation.ARTIFACT_IMAGE:
-                    # Open the image from binary data and save it to disk
-                    img = Image.open(io.BytesIO(artifact.binary))
-
-                    # Display the image on the web interface
-                    st.image(img, caption="The image is created from your description")
+                            # Display the image on the web interface
+                            st.image(img, caption="The image is created from your description")
+            else:
+                st.error("Please enter the description in English!")
+        except LangDetectException:
+            st.error("Could not detect the language. Please enter a valid text!")
     else:
         st.error("Please enter an image description!")
 
