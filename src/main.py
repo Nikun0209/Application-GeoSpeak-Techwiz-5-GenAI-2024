@@ -54,7 +54,7 @@ st.markdown("""
 with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
-        options=["Documents", "Text", "ChatBot", "Stability", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
+        options=["Documents", "Text", "ChatBot", "ImageBot", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
         icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb"],
         menu_icon="menu-up",
         default_index=0,
@@ -361,7 +361,7 @@ if selected == "ChatBot":
             st.error(f"An error occurred: {str(e)}")
 
 # Tab 4: Stability
-if selected == "Stability":
+if selected == "ImageBot":
     # Get the image description from the user
     prompt = st.chat_input("Describe an image you want to create")
     
