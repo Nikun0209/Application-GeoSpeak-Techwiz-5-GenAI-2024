@@ -101,187 +101,189 @@ if selected == "Documents":
         </style>
         """, unsafe_allow_html=True
     )
-
-    if uploaded_file:
-        if st.button("Translate",  key="translate_button_tab1"):
-            if uploaded_file.name.endswith('.txt'):
-                # Read file as binary
-                file_bytes = uploaded_file.read()
-                
-                # Detect file encoding
-                result = chardet.detect(file_bytes)
-                encoding = result['encoding']
-                
-                # Decode file content using detected encoding
-                file_contents = file_bytes.decode(encoding)
-
-                # Limit the number of characters
-                if len(file_contents) > 1000:
-                    st.warning("Limit is 1000 characters.")
-                    st.stop()  # Stop the program
-                else:        
-                    source_language = detect(file_contents)
-                    language_mapping = {
-                        "Chinese Simplified": "zh-CN",
-                        "Chinese Traditional": "zh-TW",
-                        "English": "en",
-                        "Vietnamese": "vi",
-                        "Korean": "ko",
-                        "Japanese": "ja"
-                    }
-
-                    target_language_code = language_mapping.get(output_language_tab1)
-
-                    if source_language == target_language_code:
-                        st.warning(f"The content you provided already in {output_language_tab1}.")
-                        st.stop()  # Stop the program
-                    else:
-                        translated_text = google_gemini_translate(file_contents, None, target_language_code)
-                        st.session_state.translated_text_tab1 = translated_text
-            elif uploaded_file.name.endswith('.docx'):
-                doc = Document(uploaded_file)
-                full_text = []
-                for para in doc.paragraphs:
-                    full_text.append(para.text)
-                text = '\n'.join(full_text)
-
-                # Limit the number of characters
-                if len(text) > 1000:
-                    st.warning("Limit is 1000 characters.")
-                    st.stop()  # Stop the program
-                else:
-                    source_language = detect(text)
-                    language_mapping = {
-                        "Chinese Simplified": "zh-CN",
-                        "Chinese Traditional": "zh-TW",
-                        "English": "en",
-                        "Vietnamese": "vi",
-                        "Korean": "ko",
-                        "Japanese": "ja"
-                    }
-                    target_language_code = language_mapping.get(output_language_tab1)
+    # Nếu có tệp được tải lên, lưu nó vào session_state
+    if uploaded_file is not None:
+        if uploaded_file:
+            if st.button("Translate",  key="translate_button_tab1"):
+                if uploaded_file.name.endswith('.txt'):
+                    # Read file as binary
+                    file_bytes = uploaded_file.read()
                     
-                    if source_language == target_language_code:
-                        st.warning(f"The content you provided is already in {output_language_tab1}.")
+                    # Detect file encoding
+                    result = chardet.detect(file_bytes)
+                    encoding = result['encoding']
+                    
+                    # Decode file content using detected encoding
+                    file_contents = file_bytes.decode(encoding)
+
+                    # Limit the number of characters
+                    if len(file_contents) > 1000:
+                        st.warning("Limit is 1000 characters.")
+                        st.stop()  # Stop the program
+                    else:        
+                        source_language = detect(file_contents)
+                        language_mapping = {
+                            "Chinese Simplified": "zh-CN",
+                            "Chinese Traditional": "zh-TW",
+                            "English": "en",
+                            "Vietnamese": "vi",
+                            "Korean": "ko",
+                            "Japanese": "ja"
+                        }
+
+                        target_language_code = language_mapping.get(output_language_tab1)
+
+                        if source_language == target_language_code:
+                            st.warning(f"The content you provided already in {output_language_tab1}.")
+                            st.stop()  # Stop the program
+                        else:
+                            translated_text = google_gemini_translate(file_contents, None, target_language_code)
+                            st.session_state.translated_text_tab1 = translated_text
+                elif uploaded_file.name.endswith('.docx'):
+                    doc = Document(uploaded_file)
+                    full_text = []
+                    for para in doc.paragraphs:
+                        full_text.append(para.text)
+                    text = '\n'.join(full_text)
+
+                    # Limit the number of characters
+                    if len(text) > 1000:
+                        st.warning("Limit is 1000 characters.")
                         st.stop()  # Stop the program
                     else:
-                        input_language = language_mapping.get(source_language)
-                        output_language = language_mapping.get(target_language_code)
+                        source_language = detect(text)
+                        language_mapping = {
+                            "Chinese Simplified": "zh-CN",
+                            "Chinese Traditional": "zh-TW",
+                            "English": "en",
+                            "Vietnamese": "vi",
+                            "Korean": "ko",
+                            "Japanese": "ja"
+                        }
+                        target_language_code = language_mapping.get(output_language_tab1)
+                        
+                        if source_language == target_language_code:
+                            st.warning(f"The content you provided is already in {output_language_tab1}.")
+                            st.stop()  # Stop the program
+                        else:
+                            input_language = language_mapping.get(source_language)
+                            output_language = language_mapping.get(target_language_code)
 
-                        # Translate text using Google Translate API
-                        translator = GoogleTranslator(source=source_language, target=target_language_code)
-                        translated_text = translator.translate(text)
-                        st.session_state.translated_text_tab1 = translated_text
-                        # st.session_state.uploaded_file_type = 'docx'
-            
-            elif uploaded_file.name.endswith('.pdf'):
-                # Extract text from the PDF
-                with open("temp.pdf", "wb") as f:
-                    f.write(uploaded_file.getbuffer())
-
-                doc = fitz.open("temp.pdf")
-                full_text = ""
-                for page_num in range(len(doc)):
-                    page = doc[page_num]
-                    full_text += page.get_text()
-
-                # Limit the number of characters
-                if len(full_text) > 1000:
-                    st.warning("Limit is 1000 characters.")
-                    st.stop()  # Stop the program
-                else:
-                    source_language = detect(full_text)
-                    language_mapping = {
-                        "Chinese Simplified": "zh-CN",
-                        "Chinese Traditional": "zh-TW",
-                        "English": "en",
-                        "Vietnamese": "vi",
-                        "Korean": "ko",
-                        "Japanese": "ja"
-                    }
-                    target_language_code = language_mapping.get(output_language_tab1)
-
-                    if source_language == target_language_code:
-                        st.warning(f"The content you provided is already in {output_language_tab1}.")
-                        st.stop()  # Stop the program
-                    else:
-                        input_language = language_mapping.get(source_language)
-                        output_language = language_mapping.get(target_language_code)
-
-                        translator = GoogleTranslator(source=source_language, target=target_language_code)
-                        translated_text = translator.translate(full_text)
-                        st.session_state.translated_text_tab1 = translated_text
+                            # Translate text using Google Translate API
+                            translator = GoogleTranslator(source=source_language, target=target_language_code)
+                            translated_text = translator.translate(text)
+                            st.session_state.translated_text_tab1 = translated_text
+                            # st.session_state.uploaded_file_type = 'docx'
                 
-            else:   
-                st.error("Please upload a file with the extension .txt, .docx, .pdf")
+                elif uploaded_file.name.endswith('.pdf'):
+                    # Extract text from the PDF
+                    with open("temp.pdf", "wb") as f:
+                        f.write(uploaded_file.getbuffer())
 
-    # Display translated result
-    if "translated_text_tab1" in st.session_state:
-        if uploaded_file.name.endswith('.txt'):
-            st.write("Translated content")
-            st.success(st.session_state.translated_text_tab1)
+                    doc = fitz.open("temp.pdf")
+                    full_text = ""
+                    for page_num in range(len(doc)):
+                        page = doc[page_num]
+                        full_text += page.get_text()
 
-            # Create file name based on current time hashed with MD5
-            current_time = datetime.now().isoformat()
-            md5_hash = hashlib.md5(current_time.encode()).hexdigest()
-            file_name = f"{md5_hash}.txt"
+                    # Limit the number of characters
+                    if len(full_text) > 1000:
+                        st.warning("Limit is 1000 characters.")
+                        st.stop()  # Stop the program
+                    else:
+                        source_language = detect(full_text)
+                        language_mapping = {
+                            "Chinese Simplified": "zh-CN",
+                            "Chinese Traditional": "zh-TW",
+                            "English": "en",
+                            "Vietnamese": "vi",
+                            "Korean": "ko",
+                            "Japanese": "ja"
+                        }
+                        target_language_code = language_mapping.get(output_language_tab1)
 
-            # Create .txt file for translated content and provide download link
-            translated_text = st.session_state.translated_text_tab1
-            buffer = io.BytesIO()
-            buffer.write(translated_text.encode('utf-8'))
-            buffer.seek(0)
-            
-            st.download_button(
-                label="Download translation",
-                data=buffer,
-                file_name=file_name,
-                mime="text/plain"
-            )
-        elif uploaded_file.name.endswith('.docx'):
-            st.write("Translated content")
-            st.success(st.session_state.translated_text_tab1)
-            buffer = io.BytesIO()
-            current_time = datetime.now().isoformat()
-            md5_hash = hashlib.md5(current_time.encode()).hexdigest()
-            file_name = f"{md5_hash}.docx"
-            translated_text = st.session_state.translated_text_tab1
-            doc = Document()
-            doc.add_paragraph(translated_text)
-            doc.save(buffer)
-            mime_type = "application/msword"
+                        if source_language == target_language_code:
+                            st.warning(f"The content you provided is already in {output_language_tab1}.")
+                            st.stop()  # Stop the program
+                        else:
+                            input_language = language_mapping.get(source_language)
+                            output_language = language_mapping.get(target_language_code)
 
-            buffer.seek(0)
-            st.download_button(
-                label="Download translation",
-                data=buffer,
-                file_name=file_name,
-                mime=mime_type
-            )
-        elif uploaded_file.name.endswith('.pdf'):
-            st.write("Translated content")
-            st.success(st.session_state.translated_text_tab1)
+                            translator = GoogleTranslator(source=source_language, target=target_language_code)
+                            translated_text = translator.translate(full_text)
+                            st.session_state.translated_text_tab1 = translated_text
+                    
+                else:   
+                    st.error("Please upload a file with the extension .txt, .docx, .pdf")
 
-            buffer = io.BytesIO()
-            current_time = datetime.now().isoformat()
-            md5_hash = hashlib.md5(current_time.encode()).hexdigest()
-            file_name = f"{md5_hash}.docx"
-            translated_text = st.session_state.translated_text_tab1
-            doc = Document()
-            doc.add_paragraph(translated_text)
-            doc.save(buffer)
-            mime_type = "application/msword"
+        # Display translated result
+        if "translated_text_tab1" in st.session_state:
+            if uploaded_file.name.endswith('.txt'):
+                st.write("Translated content")
+                st.success(st.session_state.translated_text_tab1)
 
-            buffer.seek(0)
-            st.download_button(
-                label="Download translation",
-                data=buffer,
-                file_name=file_name,
-                mime=mime_type
-            )
-        else:
-            # st.write("Error")
-            st.rerun()
+                # Create file name based on current time hashed with MD5
+                current_time = datetime.now().isoformat()
+                md5_hash = hashlib.md5(current_time.encode()).hexdigest()
+                file_name = f"{md5_hash}.txt"
+
+                # Create .txt file for translated content and provide download link
+                translated_text = st.session_state.translated_text_tab1
+                buffer = io.BytesIO()
+                buffer.write(translated_text.encode('utf-8'))
+                buffer.seek(0)
+                
+                st.download_button(
+                    label="Download translation",
+                    data=buffer,
+                    file_name=file_name,
+                    mime="text/plain"
+                )
+            elif uploaded_file.name.endswith('.docx'):
+                st.write("Translated content")
+                st.success(st.session_state.translated_text_tab1)
+                buffer = io.BytesIO()
+                current_time = datetime.now().isoformat()
+                md5_hash = hashlib.md5(current_time.encode()).hexdigest()
+                file_name = f"{md5_hash}.docx"
+                translated_text = st.session_state.translated_text_tab1
+                doc = Document()
+                doc.add_paragraph(translated_text)
+                doc.save(buffer)
+                mime_type = "application/msword"
+
+                buffer.seek(0)
+                st.download_button(
+                    label="Download translation",
+                    data=buffer,
+                    file_name=file_name,
+                    mime=mime_type
+                )
+            elif uploaded_file.name.endswith('.pdf'):
+                st.write("Translated content")
+                st.success(st.session_state.translated_text_tab1)
+
+                buffer = io.BytesIO()
+                current_time = datetime.now().isoformat()
+                md5_hash = hashlib.md5(current_time.encode()).hexdigest()
+                file_name = f"{md5_hash}.docx"
+                translated_text = st.session_state.translated_text_tab1
+                doc = Document()
+                doc.add_paragraph(translated_text)
+                doc.save(buffer)
+                mime_type = "application/msword"
+
+                buffer.seek(0)
+                st.download_button(
+                    label="Download translation",
+                    data=buffer,
+                    file_name=file_name,
+                    mime=mime_type
+                )
+            else:
+                st.write("Error")
+    else:
+        st.write("")        
 
 # Tab 2: Text translation
 if selected == "Text":
