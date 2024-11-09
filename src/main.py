@@ -383,33 +383,33 @@ if selected == "AI Image Generator":
             # Detect the language of the prompt
             language = detect(prompt)
             
-            if language == "en":
-                # Initialize the Stability AI client
-                stability_api = client.StabilityInference(
-                    key=stability_api_key,  # Your API key
-                    verbose=True,
-                )
+            # if language == "en":
+            # Initialize the Stability AI client
+            stability_api = client.StabilityInference(
+                key=stability_api_key,  # Your API key
+                verbose=True,
+            )
 
-                # Send the request to generate an image
-                answers = stability_api.generate(
-                    prompt=prompt,
-                    seed=12345,  # Optional: Set a seed to create reproducible results
-                    steps=50,  # Number of steps for image creation
-                )
+            # Send the request to generate an image
+            answers = stability_api.generate(
+                prompt=prompt,
+                seed=12345,  # Optional: Set a seed to create reproducible results
+                steps=50,  # Number of steps for image creation
+            )
 
-                # Process the response from Stability AI
-                for resp in answers:
-                    for artifact in resp.artifacts:
-                        if artifact.finish_reason == generation.FILTER:
-                            st.error("Request filtered due to NSFW content")
-                        if artifact.type == generation.ARTIFACT_IMAGE:
-                            # Open the image from binary data and save it to disk
-                            img = Image.open(io.BytesIO(artifact.binary))
+            # Process the response from Stability AI
+            for resp in answers:
+                for artifact in resp.artifacts:
+                    if artifact.finish_reason == generation.FILTER:
+                        st.error("Request filtered due to NSFW content")
+                    if artifact.type == generation.ARTIFACT_IMAGE:
+                        # Open the image from binary data and save it to disk
+                        img = Image.open(io.BytesIO(artifact.binary))
 
-                            # Display the image on the web interface
-                            st.image(img, caption="The image is created from your description")
-            else:
-                st.error("Please enter the description in English!")
+                        # Display the image on the web interface
+                        st.image(img, caption="The image is created from your description")
+                # else:
+                #     st.error("Please enter the description in English!")
         except LangDetectException:
             st.error("Could not detect the language. Please enter a valid text!")
     else:

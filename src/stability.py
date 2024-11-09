@@ -1,1 +1,1 @@
-stability_api_key = "sk-regeZcqOHc2e8luCYa9fahWIPTgvQ50Zw33HKrT9JPhToGZV"
+stability_api_key = "sk-eRXrcdISZXopTsLL3ZXxQ7PCBshEPyC4qCNnBqnBCp9cEqpj"
