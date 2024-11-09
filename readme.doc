@@ -89,7 +89,7 @@ Create a new virtual environment using the venv module:
 
 Activate the virtual environment:
 
-`myenv\Scripts\activate`
+`venv\Scripts\activate`
 
 Install the project requirements using pip:
 

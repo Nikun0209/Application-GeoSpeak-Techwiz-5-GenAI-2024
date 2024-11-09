@@ -4,7 +4,6 @@ import tempfile
 import pickle
 import streamlit as st
 
-
 api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent"
 api_key = "AIzaSyB1Z8o2ipBbuuSJOI3a8okqkrSBs5_Tx28"
 

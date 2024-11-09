@@ -7,6 +7,7 @@ import requests # type: ignore
 import hashlib
 import fitz # type: ignore
 import google.generativeai as gen_ai # type: ignore
+import tempfile
 
 from dotenv import load_dotenv # type: ignore
 from datetime import datetime
@@ -101,6 +102,7 @@ if selected == "Documents":
         </style>
         """, unsafe_allow_html=True
     )
+    
     # Nếu có tệp được tải lên, lưu nó vào session_state
     if uploaded_file is not None:
         if uploaded_file:
@@ -174,13 +176,14 @@ if selected == "Documents":
                             translated_text = translator.translate(text)
                             st.session_state.translated_text_tab1 = translated_text
                             # st.session_state.uploaded_file_type = 'docx'
-                
+
                 elif uploaded_file.name.endswith('.pdf'):
                     # Extract text from the PDF
-                    with open("temp.pdf", "wb") as f:
-                        f.write(uploaded_file.getbuffer())
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf:
+                        temp_pdf.write(uploaded_file.getbuffer())
+                        temp_pdf_path = temp_pdf.name
 
-                    doc = fitz.open("temp.pdf")
+                    doc = fitz.open(temp_pdf_path)
                     full_text = ""
                     for page_num in range(len(doc)):
                         page = doc[page_num]
@@ -212,7 +215,7 @@ if selected == "Documents":
                             translator = GoogleTranslator(source=source_language, target=target_language_code)
                             translated_text = translator.translate(full_text)
                             st.session_state.translated_text_tab1 = translated_text
-                    
+                
                 else:   
                     st.error("Please upload a file with the extension .txt, .docx, .pdf")
 
@@ -407,9 +410,9 @@ if selected == "AI Image Generator":
                         img = Image.open(io.BytesIO(artifact.binary))
 
                         # Display the image on the web interface
-                        st.image(img, caption="The image is created from your description")
-                # else:
-                #     st.error("Please enter the description in English!")
+                        st.image(img, caption="The image is created from your description") 
+            # else:
+            #     st.error("Please enter the description in English!")
         except LangDetectException:
             st.error("Could not detect the language. Please enter a valid text!")
     else:
