@@ -280,7 +280,8 @@ if selected == "Documents":
                 mime=mime_type
             )
         else:
-            st.write("Error")
+            # st.write("Error")
+            st.rerun()
 
 # Tab 2: Text translation
 if selected == "Text":
