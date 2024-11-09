@@ -8,6 +8,7 @@ import hashlib
 import fitz # type: ignore
 import google.generativeai as gen_ai # type: ignore
 import tempfile
+import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation # type: ignore
 
 from dotenv import load_dotenv # type: ignore
 from datetime import datetime
@@ -18,7 +19,6 @@ from docx import Document # type: ignore
 from dotenv import load_dotenv # type: ignore
 from streamlit_option_menu import option_menu # type: ignore
 from stability import stability_api_key   
-import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation # type: ignore
 from stability_sdk import client # type: ignore
 from PIL import Image # type: ignore
 from pdf2docx import Converter # type: ignore
