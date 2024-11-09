@@ -1,26 +1,29 @@
-import streamlit as st
+import streamlit as st # type: ignore
 import io
 import os
-import chardet
-import fitz  # PyMuPDF
-import requests
+import chardet # type: ignore
+import fitz  # PyMuPDF # type: ignore
+import requests # type: ignore
 import hashlib
 import fitz # type: ignore
 import google.generativeai as gen_ai # type: ignore
+from dotenv import load_dotenv # type: ignore
 
 from datetime import datetime
-from langdetect import detect, DetectorFactory, LangDetectException
-from google_gemini import google_gemini_translate, api_key, api_url, translate_role_for_streamlit
-from deep_translator import GoogleTranslator
+from langdetect import detect, DetectorFactory, LangDetectException # type: ignore
+from google_gemini import google_gemini_translate, api_key, api_url, translate_role_for_streamlit, get_gemini_response_pdf, save_to_temp, load_from_temp, update_chat_history
+from deep_translator import GoogleTranslator # type: ignore
 from docx import Document # type: ignore
 from dotenv import load_dotenv # type: ignore
-from streamlit_option_menu import option_menu
+from streamlit_option_menu import option_menu # type: ignore
 from stability import stability_api_key   
-import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
-from stability_sdk import client
-from PIL import Image
-from pdf2docx import Converter
+import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation # type: ignore
+from stability_sdk import client # type: ignore
+from PIL import Image # type: ignore
+from pdf2docx import Converter # type: ignore
 from tempfile import NamedTemporaryFile
+from langchain.text_splitter import RecursiveCharacterTextSplitter # type: ignore
+from PyPDF2 import PdfReader # type: ignore
 
 # Ensure consistency in language detection
 DetectorFactory.seed = 0
@@ -54,8 +57,8 @@ st.markdown("""
 with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
-        options=["Documents", "Text", "ChatBot", "ImageBot", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
-        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb"],
+        options=["Documents", "Text", "ChatBot", "Image ChatBot", "PDF ChatBot", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
+        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "chat-dots", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb"],
         menu_icon="menu-up",
         default_index=0,
         # orientation="horizontal"
@@ -360,8 +363,8 @@ if selected == "ChatBot":
             # Catch any exception and display an error message
             st.error(f"An error occurred: {str(e)}")
 
-# Tab 4: Stability
-if selected == "ImageBot":
+# Tab 4: Image ChatBot
+if selected == "Image ChatBot":
     # Get the image description from the user
     prompt = st.chat_input("Describe an image you want to create")
     
@@ -402,7 +405,78 @@ if selected == "ImageBot":
     else:
         st.error("Please enter an image description!")
 
-# Tab 5: PDF to Word
+# Tab 5 PDF ChatBot
+if selected == "PDF ChatBot":
+    pdf = st.file_uploader("Upload your PDF", type="pdf")
+
+    # Reset chat history when a new PDF is uploaded
+    if pdf is not None and ('previous_pdf' not in st.session_state or st.session_state.previous_pdf != pdf.name):
+        # Rerun the app when a new PDF is uploaded
+        st.session_state.chat_history = []  # Reset the chat history
+        st.session_state.previous_pdf = pdf.name  # Save the name of the uploaded PDF to prevent resetting history on the same PDF
+
+        # Trigger a rerun to reset and reprocess the new PDF
+        st.rerun()
+
+    if pdf is not None:
+        pdf_reader = PdfReader(pdf)
+
+        text = ""
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,
+            chunk_overlap=200,
+            length_function=len
+        )
+
+        chunks = text_splitter.split_text(text=text)
+
+        store_name = pdf.name[:-4]
+
+        if 'temp_file_path' in st.session_state:
+            temp_file_path = st.session_state['temp_file_path']
+            VectorStore = load_from_temp(temp_file_path)
+        else:
+            temp_file_path = save_to_temp(chunks)
+            st.session_state['temp_file_path'] = temp_file_path
+            VectorStore = chunks
+
+        load_dotenv()
+
+        # Display the chat history (questions and answers)
+        if "chat_history" in st.session_state:
+            for message in st.session_state.chat_history:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["text"])
+
+        # User enters a question
+        query = st.chat_input("Ask a question about your PDF file")
+
+        if query:
+            # Add the user's question to the chat history and display it immediately
+            update_chat_history("user", query)
+            st.chat_message("user").markdown(query)
+
+            # Send the question to Gemini to get an answer
+            context = " ".join(chunks[:3])  # Select the first three chunks of the PDF text as context
+            response = get_gemini_response_pdf(query, context)
+
+            # Add Gemini's response to the chat history
+            update_chat_history("assistant", response)
+
+            # Display Gemini's response
+            st.chat_message("assistant").markdown(response)
+
+        # Delete temporary file after processing
+        if 'temp_file_path' in st.session_state:
+            temp_file_path = st.session_state['temp_file_path']
+            if temp_file_path and os.path.exists(temp_file_path):
+                os.remove(temp_file_path)
+            del st.session_state['temp_file_path']
+
+# Tab 6: PDF to Word
 if selected == "PDF to DOC":
     # Upload PDF file from user
     uploaded_file = st.file_uploader("Convert PDF to DOC", type=["pdf"])
@@ -445,7 +519,7 @@ if selected == "PDF to DOC":
             except Exception as e:
                 st.error(f"An error occurred while deleting the files: {e}")
 
-# Tab 6: PDF to PNG
+# Tab 7: PDF to PNG
 if selected == "PDF to PNG":
     # Upload PDF file from the user
     uploaded_file = st.file_uploader("Convert PDF to PNG", type=["pdf"])
@@ -503,7 +577,7 @@ if selected == "PDF to PNG":
         except Exception as e:
             st.error(f"An error occurred while deleting files: {e}")
 
-# Tab 7: PDF to JPG
+# Tab 8: PDF to JPG
 if selected == "PDF to JPG":
     # Upload PDF file from the user
     uploaded_file = st.file_uploader("Convert PDF to JPG", type=["pdf"])
@@ -561,7 +635,7 @@ if selected == "PDF to JPG":
         except Exception as e:
             st.error(f"An error occurred while deleting files: {e}")
 
-# Tab 8: Blog
+# Tab 9: Blog
 if selected == "Blog":
      # st.title("Techwiz 5 - GeoSpeak - Developed by The Avengers")
     st.title("Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams")
@@ -661,7 +735,7 @@ if selected == "Blog":
         <p style="text-align: justify;">There are still many areas to be mentioned to demonstrate the usefulness of this sophisticated Application.</p>
     """, unsafe_allow_html=True)
 
-# Tab 9: About Us
+# Tab 10: About Us
 if selected == "About Us":
     col1, col2, col3 = st.columns(3)
 
