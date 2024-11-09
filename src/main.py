@@ -416,7 +416,7 @@ if selected == "AI Image Generator":
         except LangDetectException:
             st.error("Could not detect the language. Please enter a valid text!")
     else:
-        st.error("Please enter an image description!")
+        st.write()
 
 # Tab 5 PDF ChatBot
 if selected == "PDF ChatBot":
