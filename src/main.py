@@ -7,8 +7,8 @@ import requests # type: ignore
 import hashlib
 import fitz # type: ignore
 import google.generativeai as gen_ai # type: ignore
-from dotenv import load_dotenv # type: ignore
 
+from dotenv import load_dotenv # type: ignore
 from datetime import datetime
 from langdetect import detect, DetectorFactory, LangDetectException # type: ignore
 from google_gemini import google_gemini_translate, api_key, api_url, translate_role_for_streamlit, get_gemini_response_pdf, save_to_temp, load_from_temp, update_chat_history
