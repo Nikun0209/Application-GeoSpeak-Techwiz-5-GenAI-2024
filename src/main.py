@@ -57,7 +57,7 @@ st.markdown("""
 with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
-        options=["Documents", "Text", "ChatBot", "Image ChatBot", "PDF ChatBot", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
+        options=["Documents", "Text", "ChatBot", "AI Image Generator", "PDF ChatBot", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
         icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "chat-dots", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb"],
         menu_icon="menu-up",
         default_index=0,
@@ -66,6 +66,8 @@ with st.sidebar:
 
 # Tab 1: Document translation
 if selected == "Documents":
+    st.subheader("Translate Documents 📄")
+
     col1, col2 = st.columns(2)
 
     # Select output language
@@ -282,6 +284,8 @@ if selected == "Documents":
 
 # Tab 2: Text translation
 if selected == "Text":
+    st.subheader("Translate Text 🔤")
+
     col_1, col_2 = st.columns(2)
 
     # Column for selecting input language
@@ -329,6 +333,7 @@ if selected == "Text":
 
 # Tab 3: ChatBot    
 if selected == "ChatBot":
+    st.subheader("Chat with ChatBot 💬")
     # Load environment variables
     load_dotenv()
 
@@ -363,8 +368,10 @@ if selected == "ChatBot":
             # Catch any exception and display an error message
             st.error(f"An error occurred: {str(e)}")
 
-# Tab 4: Image ChatBot
-if selected == "Image ChatBot":
+# Tab 4: Image Generator
+if selected == "AI Image Generator":
+    st.subheader("AI Image Generator 📄")
+    
     # Get the image description from the user
     prompt = st.chat_input("Describe an image you want to create")
     
@@ -407,6 +414,8 @@ if selected == "Image ChatBot":
 
 # Tab 5 PDF ChatBot
 if selected == "PDF ChatBot":
+    st.subheader("Chat with PDF ChatBot 💬")
+
     pdf = st.file_uploader("Upload your PDF", type="pdf")
 
     # Reset chat history when a new PDF is uploaded
@@ -478,6 +487,8 @@ if selected == "PDF ChatBot":
 
 # Tab 6: PDF to Word
 if selected == "PDF to DOC":
+    st.subheader("PDF to DOC 📄")
+
     # Upload PDF file from user
     uploaded_file = st.file_uploader("Convert PDF to DOC", type=["pdf"])
 
@@ -521,6 +532,8 @@ if selected == "PDF to DOC":
 
 # Tab 7: PDF to PNG
 if selected == "PDF to PNG":
+    st.subheader("PDF to PNG 📄")
+
     # Upload PDF file from the user
     uploaded_file = st.file_uploader("Convert PDF to PNG", type=["pdf"])
 
@@ -579,6 +592,8 @@ if selected == "PDF to PNG":
 
 # Tab 8: PDF to JPG
 if selected == "PDF to JPG":
+    st.subheader("PDF to JPG 📄")
+
     # Upload PDF file from the user
     uploaded_file = st.file_uploader("Convert PDF to JPG", type=["pdf"])
 
