@@ -780,11 +780,11 @@ if selected == "About Us":
         **THE AVENGERS - AI TRANSLATOR PROJECT MEMBERS**
         - Dương Gia Thành: Main Developer
         - Nguyễn Quốc Anh: Project Manager
-        - Nguyễn Thị Dung
         - Nguyễn Quốc Bảo
         - Phạm Hoàng Tiến
         - Trần Mai Phương
         - Lâm Kim Khánh
+        - Nguyễn Thị Dung
 
         Website: [Visit here](https://theavengers.streamlit.app/)\n
 
