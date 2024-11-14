@@ -783,7 +783,6 @@ if selected == "About Us":
         - Nguyễn Quốc Bảo
         - Phạm Hoàng Tiến
         - Trần Mai Phương
-        - Lâm Kim Khánh
         - Nguyễn Thị Dung
 
         Website: [Visit here](https://theavengers.streamlit.app/)\n
