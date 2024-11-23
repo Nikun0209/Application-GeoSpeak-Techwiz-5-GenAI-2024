@@ -55,11 +55,21 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Create sidebar
+# with st.sidebar:
+#     selected =  option_menu(
+#         menu_title="Menu",
+#         options=["Documents", "Text", "ChatBot", "AI Image Generator", "PDF ChatBot", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
+#         icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "chat-dots", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb"],
+#         menu_icon="menu-up",
+#         default_index=0,
+#         # orientation="horizontal"
+#     )
+
 with st.sidebar:
     selected =  option_menu(
         menu_title="Menu",
-        options=["Documents", "Text", "ChatBot", "AI Image Generator", "PDF ChatBot", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
-        icons=["file-earmark-text", "alphabet", "robot", "bounding-box", "chat-dots", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb"],
+        options=["Documents", "Text", "ChatBot", "PDF ChatBot", "PDF to DOC", "PDF to PNG", "PDF to JPG", "Blog", "About Us"],
+        icons=["file-earmark-text", "alphabet", "robot", "chat-dots", "file-earmark-word", "filetype-png", "filetype-jpg", "book", "lightbulb"],
         menu_icon="menu-up",
         default_index=0,
         # orientation="horizontal"
@@ -375,48 +385,53 @@ if selected == "ChatBot":
             st.error(f"An error occurred: {str(e)}")
 
 # Tab 4: Image Generator
-if selected == "AI Image Generator":
-    st.subheader("AI Image Generator 📄")
-    
-    # Get the image description from the user
-    prompt = st.chat_input("Describe an image you want to create")
-    
-    if prompt:  # Check if the user has entered a description
-        try:
-            # Detect the language of the prompt
-            language = detect(prompt)
-            
-            # if language == "en":
-            # Initialize the Stability AI client
-            stability_api = client.StabilityInference(
-                key=stability_api_key,  # Your API key
-                verbose=True,
-            )
+# if selected == "AI Image Generator":
+#     key_api = st.text_input("Please enter your key")
 
-            # Send the request to generate an image
-            answers = stability_api.generate(
-                prompt=prompt,
-                seed=12345,  # Optional: Set a seed to create reproducible results
-                steps=50,  # Number of steps for image creation
-            )
+#     if not key_api:
+#         st.error("Please enter your key")
+#     else:  
+#         st.subheader("AI Image Generator 📄")
 
-            # Process the response from Stability AI
-            for resp in answers:
-                for artifact in resp.artifacts:
-                    if artifact.finish_reason == generation.FILTER:
-                        st.error("Request filtered due to NSFW content")
-                    if artifact.type == generation.ARTIFACT_IMAGE:
-                        # Open the image from binary data and save it to disk
-                        img = Image.open(io.BytesIO(artifact.binary))
+#         # Get the image description from the user
+#         prompt = st.chat_input("Describe an image you want to create")
+        
+#         if prompt:  # Check if the user has entered a description
+#             try:
+#                 # Detect the language of the prompt
+#                 language = detect(prompt)
+                
+#                 # if language == "en":
+#                 # Initialize the Stability AI client
+#                 stability_api = client.StabilityInference(
+#                     key=key_api,  # Your API key
+#                     verbose=True,
+#                 )
 
-                        # Display the image on the web interface
-                        st.image(img, caption="The image is created from your description") 
-            # else:
-            #     st.error("Please enter the description in English!")
-        except LangDetectException:
-            st.error("Could not detect the language. Please enter a valid text!")
-    else:
-        st.write()
+#                 # Send the request to generate an image
+#                 answers = stability_api.generate(
+#                     prompt=prompt,
+#                     seed=12345,  # Optional: Set a seed to create reproducible results
+#                     steps=50,  # Number of steps for image creation
+#                 )
+
+#                 # Process the response from Stability AI
+#                 for resp in answers:
+#                     for artifact in resp.artifacts:
+#                         if artifact.finish_reason == generation.FILTER:
+#                             st.error("Request filtered due to NSFW content")
+#                         if artifact.type == generation.ARTIFACT_IMAGE:
+#                             # Open the image from binary data and save it to disk
+#                             img = Image.open(io.BytesIO(artifact.binary))
+
+#                             # Display the image on the web interface
+#                             st.image(img, caption="The image is created from your description") 
+#                 # else:
+#                 #     st.error("Please enter the description in English!")
+#             except LangDetectException:
+#                 st.error("Could not detect the language. Please enter a valid text!")
+#         else:
+#             st.write()
 
 # Tab 5 PDF ChatBot
 if selected == "PDF ChatBot":
