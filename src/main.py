@@ -49,7 +49,7 @@ st.markdown("""
     }
     </style>
             
-    <div class="subtitle">Capture semantic meaning!</div>
+    <div class="subtitle">Capture semantic meaning! <br> Fist Prize 🥇 - Category: GenAI</div> <br>
     <hr>
             
     """, unsafe_allow_html=True)
