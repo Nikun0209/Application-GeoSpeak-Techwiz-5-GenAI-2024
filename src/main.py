@@ -787,7 +787,7 @@ if selected == "About Us":
         """
         **ABOUT US** \n
         Techwiz 5 - 2024 - Global IT Competition - 43 nations - over 810 teams \n
-        Fỉst Prize - Category: GenAI \n
+        Fỉst Prize 🥇 - Category: GenAI \n
         Project: GeoSpeak - AI Translator & Chatbot \n
 
         Lecturer: MSc. Hồ Nhựt Minh
