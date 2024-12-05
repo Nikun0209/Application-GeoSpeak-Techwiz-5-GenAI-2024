@@ -354,15 +354,8 @@ if selected == "ChatBot":
     load_dotenv()
 
     # Set up Google Gemini-Pro AI model
-    # gen_ai.configure(api_key=api_key)
-    # model = gen_ai.GenerativeModel('gemini-pro')
-    
-    try:
-        gen_ai.configure(api_key=api_key)
-        model = gen_ai.GenerativeModel('gemini-pro')
-    except Exception as e:  # Bắt tất cả các lỗi
-        if e:
-            st.error("API key đã hết hạn. Vui lòng cung cấp API key hợp lệ.")
+    gen_ai.configure(api_key=api_key)
+    model = gen_ai.GenerativeModel('gemini-pro')
 
     # Initialize chat session in Streamlit if not already present
     if "chat_session" not in st.session_state:
@@ -389,7 +382,7 @@ if selected == "ChatBot":
 
         except Exception as e:
             # Catch any exception and display an error message
-            st.error(f"An error occurred: {str(e)}")
+            st.error("API key has expired")
 
 # Tab 4: Image Generator
 # if selected == "AI Image Generator":
