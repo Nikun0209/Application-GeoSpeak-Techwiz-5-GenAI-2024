@@ -361,7 +361,11 @@ if selected == "ChatBot":
         gen_ai.configure(api_key=api_key)
         model = gen_ai.GenerativeModel('gemini-pro')
     except Exception as e:  # Bắt tất cả các lỗi
-        st.error("API key has expired.")
+        error_message = str(e)
+        if "API Key not found" in error_message or "API_KEY_INVALID" in error_message:
+            st.error("API key đã hết hạn. Vui lòng cung cấp API key hợp lệ.")
+        else:
+            st.error("API key đã hết hạn. Vui lòng cung cấp API key hợp lệ.")
 
     # Initialize chat session in Streamlit if not already present
     if "chat_session" not in st.session_state:
