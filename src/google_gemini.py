@@ -5,7 +5,7 @@ import pickle
 import streamlit as st
 
 api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent"
-api_key = "AIzaSyB1Z8o2ipBbuuSJOI3a8okqkrSBs5_Tx28"
+api_key = "AIzaSyB-rs1m6IHd0Kdaf7Dno3TwTQGYMP9OGy8"
 
 def google_gemini_translate(input_text, input_language=None, target_language_code=None):
     headers = {
